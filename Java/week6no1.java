@@ -6,7 +6,7 @@ public class week6no1 {
 
         Scanner sc = new Scanner(System.in);
         int shipment, weight;
-        long price;
+        long price = 0;
 
         System.out.println("______________________________________");
         System.out.println("JNX Expedition");
@@ -27,19 +27,17 @@ public class week6no1 {
             } else {
                 price = 375000;
             }
-            System.out.println("\nThe shipping costs is " + price);
-
         } else if (shipment == 2) {
             if (weight <= 2) {
                 price = 0;
             } else {
                 price = 500000;
             }
-            System.out.println("\nThe shipping costs is " + price);
 
         } else {
             System.out.println("Invalid shipment service, please choose correctly!");
         }
+        System.out.println("\nThe shipping costs is " + price);
 
     }
 }
