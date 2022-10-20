@@ -1,5 +1,5 @@
 //TUGAS JOBSHEET1
-public class jobsheet1{
+public class jbs1{
 	public static void main(String[] args){
 	
 		System.out.print("--------------------------------------");
