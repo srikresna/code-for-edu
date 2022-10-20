@@ -11,9 +11,8 @@ public class jbs6no1 {
         number = input.nextInt();
 
         for(i=0; i <= number; i++){
-            if(i % 5 == 0){
+            if(i % 5 == 0)
                 continue;
-            }
             System.out.println(i);
         }
 
