@@ -1,4 +1,4 @@
-public class week7ques3ex3 {
+public class week7ques3c {
     
     public static void main(String[] args) {
         
