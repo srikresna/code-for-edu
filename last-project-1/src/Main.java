@@ -3,9 +3,9 @@ public class Main {
     //global variable
     static Scanner sc = new Scanner(System.in);
     static int menu, itemIndex;
-    static String itemCode, itemName, yesNo;
+    static String itemCode, yesNo;
     static boolean mainProcess, menuProcess, inventoryProcess, borrowingProcess, validationUser;
-    static String[] userData = {"admin", "admin"};
+    static String[] userMain = {"admin", "admin"};
     static String[] getUser = new String[2];
     static String[][] inventory = {
             {"A1", "monitor", "20", "3"},
@@ -19,8 +19,8 @@ public class Main {
     };
     static String[][] borrowItem = {
             {"7-12-2022", "A8", "laptop", "1"},
-            {"7-12-2022", "A7", "Switch", "2"},
-            {"7-12-2022", "A6", "Projector", "1"}
+            {"7-12-2022", "A7", "switch", "2"},
+            {"7-12-2022", "A6", "projector", "1"}
     };
 
     static String[][] frameInventory = new String[50][4];
@@ -28,7 +28,7 @@ public class Main {
 
     //validation user function
     static boolean validationUser(String username, String password) {
-        return username.equals(userData[0]) && password.equals(userData[1]);
+        return username.equals(userMain[0]) && password.equals(userMain[1]);
     }
 
     //array-maker function
@@ -41,13 +41,13 @@ public class Main {
 
         }
         int i = 0;
-        while (i < borrowItem.length) {
+        do {
             frameBorrowing[i][0] = borrowItem[i][0];
             frameBorrowing[i][1] = borrowItem[i][1];
             frameBorrowing[i][2] = borrowItem[i][2];
             frameBorrowing[i][3] = borrowItem[i][3];
             i++;
-        }
+        } while (i < borrowItem.length);
     }
 
     //login function
@@ -72,46 +72,80 @@ public class Main {
     }
 
     //input new item function
-    static void inputNewItem(){
-        String yesNo;
-        for (int i = inventory.length; i < frameInventory.length; i++) {
-            System.out.print("Input item code : ");
-            frameInventory[i][0] = sc.nextLine();
-            System.out.print("Input item name : ");
-            frameInventory[i][1] = sc.nextLine();
-            System.out.print("Input new stock : ");
-            frameInventory[i][2] = sc.nextLine();
-            System.out.print("Input total broken :");
-            frameInventory[i][3] = sc.nextLine();
-            System.out.print("Do you want to input again? ( y / n ) : ");
-            yesNo = sc.nextLine();
+    static void inputNewItem() {
+        for (int i = 0; i < frameInventory.length; i++) {
+            if (frameInventory[i][0] == null) {
+                System.out.print("Input item code : ");
+                frameInventory[i][0] = sc.nextLine();
+                System.out.print("Input item name : ");
+                frameInventory[i][1] = sc.nextLine();
+                System.out.print("Input new stock : ");
+                frameInventory[i][2] = sc.nextLine();
+                System.out.print("Input total broken : ");
+                frameInventory[i][3] = sc.nextLine();
+                System.out.print("Do you want to input again? ( y / n ) : ");
+                yesNo = sc.nextLine();
 
-            if (yesNo.equalsIgnoreCase("n")) {
-                break;
+                if (yesNo.equalsIgnoreCase("n")) {
+                    break;
+                }
             }
         }
     }
 
-    //edit item function
-    static void editItem(){
+    //searching array inventory itemCode
+    static int findItemCode(String[][] frameInventory, String code) {
+        for (int i = 0; i < frameInventory.length; i++) {
+            if (frameInventory[i][0] != null) {
+                if (frameInventory[i][0].equalsIgnoreCase(code)) {
+                    return i;
+                }
+            }
+        }
+        return -1;
+    }
+
+    //searching array inventory itemName
+    static int findItemName(String[][] frameInventory, String name) {
+        for (int i = 0; i < frameInventory.length; i++) {
+            if (frameInventory[i][1] != null) {
+                if (frameInventory[i][1].equalsIgnoreCase(name)) {
+                    return i;
+                }
+            }
+        }
+        return -1;
+    }
+
+    //searching array borrowing
+    static int findBorrowing(String[][] frameBorrowing, String itemCode) {
+        for (int i = 0; i < frameBorrowing.length; i++) {
+            if (frameBorrowing[i][0] != null) {
+                if (frameBorrowing[i][1].equalsIgnoreCase(itemCode)) {
+                    return i;
+                }
+            }
+        }
+        return -1;
+    }
+
+    // menu edit item function
+    static void editItem() {
         boolean menuEdit = true, subMenuEdit = true;
         itemIndex = frameInventory.length;
 
-        while (menuEdit){
+        while (menuEdit) {
             System.out.print("Input item code to edit : ");
             itemCode = sc.nextLine();
 
-            for (int i = 0; i <= frameInventory.length; i++){
-                if(frameInventory[i][0].equals(itemCode)){
-                    itemIndex = i;
-                    break;
-                }
-            }
-
-                while(subMenuEdit){
+            itemIndex = findItemCode(frameInventory, itemCode);
+            if (itemIndex == -1) {
+                System.out.println("item not found!");
+            } else {
+                while (subMenuEdit) {
                     System.out.println("\nItem found! Here's item that you want edit : ");
-                    System.out.println("| Code | Item Name      | Stock | Broken |");
-                    System.out.printf("| %-4s | %-14s | %-5s | %-6s |\n", frameInventory[itemIndex][0], frameInventory[itemIndex][1], frameInventory[itemIndex][2], frameInventory[itemIndex][3]);
+                    System.out.println("| No | Code | Item Name      | Stock | Broken |");
+                    System.out.printf("| %-2d | %-4s | %-14s | %-5s | %-6s |\n", (itemIndex + 1), frameInventory[itemIndex][0], frameInventory[itemIndex][1], frameInventory[itemIndex][2], frameInventory[itemIndex][3]);
                     System.out.println("\nWhat do you want to edit? \n1. Item code \n2. Item name \n3. Item stock \n4. Item broken \n5. Nothing");
                     System.out.print("Select option 1 - 5 : ");
                     menu = sc.nextInt();
@@ -147,23 +181,23 @@ public class Main {
                             break;
                     }
                 }
-
-
-            System.out.print("Do you want to edit again? ( y / n ) : ");
-            yesNo = sc.nextLine();
-            if (yesNo.equalsIgnoreCase("n")){
-                menuEdit = false;
+                System.out.print("Do you want to edit again? ( y / n ) : ");
+                yesNo = sc.nextLine();
+                if (yesNo.equalsIgnoreCase("n")) {
+                    menuEdit = false;
+                }
             }
         }
     }
+
 
     //find item function
     static void findItem() {
         itemIndex = frameInventory.length;
         boolean subMenuFind = true;
+        String itemName;
 
-        //nambah pencarian dari nama item
-        System.out.println("============ Search Item ============");
+        System.out.println("\n============ Search Item ============");
         System.out.print("What do you want to search ? \n1. Item code \n2. Item name \nSelect option 1 - 2 : ");
         menu = sc.nextInt();
         sc.nextLine();
@@ -172,23 +206,13 @@ public class Main {
             case 1:
                 System.out.print("Input item code : ");
                 itemCode = sc.nextLine();
-                for (int i = 0; i <= frameInventory.length; i++) {
-                    if (frameInventory[i][0].equals(itemCode)) {
-                        itemIndex = i;
-                        break;
-                    }
-                }
+                itemIndex = findItemCode(frameInventory, itemCode);
                 break;
 
             case 2:
                 System.out.print("Input item name : ");
                 itemName = sc.nextLine();
-                for (int i = 0; i <= frameInventory.length; i++) {
-                    if (frameInventory[i][1].equals(itemName)) {
-                        itemIndex = i;
-                        break;
-                    }
-                }
+                itemIndex = findItemName(frameInventory, itemName);
                 break;
 
             default:
@@ -196,12 +220,15 @@ public class Main {
                 break;
         }
 
+        if (itemIndex == -1) {
+            System.out.println("Item not found!");
+        } else {
             while (subMenuFind) {
                 System.out.println("\nItem found! Here's item that you want");
-                System.out.println("| Code | Item Name      | Stock | Broken |");
-                System.out.printf("| %-4s | %-14s | %-5s | %-6s |\n", frameInventory[itemIndex][0], frameInventory[itemIndex][1], frameInventory[itemIndex][2], frameInventory[itemIndex][3]);
-                System.out.print("\nOPTION \n1. Edit item \n2. Go back\n");
-                System.out.print("Select option 1 - 2 : ");
+                System.out.println("| No | Code | Item Name      | Stock | Broken |");
+                System.out.printf("| %-2d | %-4s | %-14s | %-5s | %-6s |\n", (itemIndex + 1), frameInventory[itemIndex][0], frameInventory[itemIndex][1], frameInventory[itemIndex][2], frameInventory[itemIndex][3]);
+                System.out.print("\nOPTION \n1. Edit item \n2. Delete item \n3. Go back\n");
+                System.out.print("Select option 1 - 3 : ");
                 menu = sc.nextInt();
                 sc.nextLine();
 
@@ -210,7 +237,11 @@ public class Main {
                         editItem();
                         break;
                     case 2:
+                        deleteItem();
+                        break;
+                    case 3:
                         subMenuFind = false;
+                        sortAfterDelete();
                         break;
 
                     default:
@@ -219,6 +250,56 @@ public class Main {
                 }
             }
         }
+    }
+
+    // function to delete item from inventory
+    static void deleteItem() {
+        itemIndex = frameInventory.length;
+        boolean subMenuDelete = true;
+
+        System.out.println("\n============ Delete Item ============");
+        System.out.print("Search item code : ");
+        itemCode = sc.nextLine();
+
+        itemIndex = findItemCode(frameInventory, itemCode);
+        if (itemIndex == -1) {
+            System.out.println("Item not found!");
+        } else {
+            while (subMenuDelete) {
+                System.out.println("\nItem found! Here's item that you want");
+                System.out.println("| No | Code | Item Name      | Stock | Broken |");
+                System.out.printf("| %-2d | %-4s | %-14s | %-5s | %-6s |\n", (itemIndex + 1), frameInventory[itemIndex][0], frameInventory[itemIndex][1], frameInventory[itemIndex][2], frameInventory[itemIndex][3]);
+                System.out.print("\nAre you sure to delete this item? ( y / n ) : ");
+                yesNo = sc.nextLine();
+
+                if (yesNo.equalsIgnoreCase("y")) {
+                    frameInventory[itemIndex][0] = null;
+                    frameInventory[itemIndex][1] = null;
+                    frameInventory[itemIndex][2] = null;
+                    frameInventory[itemIndex][3] = null;
+                    subMenuDelete = false;
+                } else if (yesNo.equalsIgnoreCase("n")) {
+                    subMenuDelete = false;
+                } else {
+                    System.out.println("\t\tInvalid option! select option correctly");
+                }
+            }
+        }
+    }
+
+    // function to sort after delete item from inventory
+    static void sortAfterDelete() {
+        for (int i = 0; i < frameInventory.length; i++) {
+            if (frameInventory[i][0] == null) {
+                for (int j = i; j < frameInventory.length - 1; j++) {
+                    frameInventory[j][0] = frameInventory[j + 1][0];
+                    frameInventory[j][1] = frameInventory[j + 1][1];
+                    frameInventory[j][2] = frameInventory[j + 1][2];
+                    frameInventory[j][3] = frameInventory[j + 1][3];
+                }
+            }
+        }
+    }
 
     // show borrowing function
     static void showBorrow() {
@@ -242,16 +323,13 @@ public class Main {
             System.out.print("Search item code to borrow : ");
             itemCode = sc.nextLine();
 
-            for (int i = 0; i < frameInventory.length; i++) {
-                if (frameInventory[i][0].equals(itemCode)) {
-                    itemIndex = i;
-                    break;
-                }
-            }
-
+            itemIndex = findItemCode(frameInventory, itemCode);
+            if (itemIndex == -1) {
+                System.out.println("Item not found!");
+            } else {
                 System.out.println("\nItem found! Here's item that you want");
-                System.out.println("| Code | Item Name      | Stock | Broken |");
-                System.out.printf("| %-4s | %-14s | %-5s | %-6s |\n", frameInventory[itemIndex][0], frameInventory[itemIndex][1], frameInventory[itemIndex][2], frameInventory[itemIndex][3]);
+                System.out.println("| No | Code | Item Name      | Stock | Broken |");
+                System.out.printf("| %-2d | %-4s | %-14s | %-5s | %-6s |\n", (itemIndex + 1), frameInventory[itemIndex][0], frameInventory[itemIndex][1], frameInventory[itemIndex][2], frameInventory[itemIndex][3]);
                 System.out.print("How many stock to borrow : ");
                 itemStock = sc.nextInt();
                 sc.nextLine();
@@ -260,19 +338,21 @@ public class Main {
                     frameInventory[itemIndex][2] = String.valueOf(Integer.parseInt(frameInventory[itemIndex][2]) - itemStock);
 
                     String yesNo;
-                    for (int i = borrowItem.length; i < frameBorrowing.length; i++) {
-                        System.out.print("Input date ( dd-mm-yyyy ) : ");
-                        frameBorrowing[i][0] = sc.nextLine();
-                        frameBorrowing[i][1] = itemCode;
-                        System.out.print("Input name :");
-                        frameBorrowing[i][2] = sc.nextLine();
-                        frameBorrowing[i][3] = String.valueOf(itemStock);
-                        System.out.println("Item borrowed!");
-                        System.out.print("Do you want to input again? ( y / n ) : ");
-                        yesNo = sc.nextLine();
+                    for (int i = 0; i < frameBorrowing.length; i++) {
+                        if (frameBorrowing[i][0] == null) {
+                            System.out.print("Input date ( dd-mm-yyyy ) : ");
+                            frameBorrowing[i][0] = sc.nextLine();
+                            frameBorrowing[i][1] = itemCode;
+                            System.out.print("Input name : ");
+                            frameBorrowing[i][2] = sc.nextLine();
+                            frameBorrowing[i][3] = String.valueOf(itemStock);
+                            System.out.println("Item borrowed!");
+                            System.out.print("Do you want input again? ( y / n ) : ");
+                            yesNo = sc.nextLine();
 
-                        if (yesNo.equalsIgnoreCase("n")) {
-                            break;
+                            if (yesNo.equalsIgnoreCase("n")) {
+                                break;
+                            }
                         }
                     }
                     showBorrow();
@@ -280,6 +360,7 @@ public class Main {
                 } else {
                     System.out.println("Item stock is not enough!");
                 }
+            }
 
             System.out.print("Do you want to borrow again? ( y / n ) : ");
             yesNo = sc.nextLine();
@@ -294,8 +375,8 @@ public class Main {
         inventoryProcess = true;
         while (inventoryProcess) {
             showInventory();
-            System.out.println("\nOPTION \n1. Input new item \n2. Edit item \n3. Find item \n4. Back to main menu ");
-            System.out.print("Select option 1 - 4 : ");
+            System.out.println("\nOPTION \n1. Input new item \n2. Edit item \n3. Find item \n4. Delete item \n5. Back to main menu ");
+            System.out.print("Select option 1 - 5 : ");
             menu = sc.nextInt();
             sc.nextLine();
 
@@ -310,6 +391,11 @@ public class Main {
                     findItem();
                     break;
                 case 4:
+                    deleteItem();
+                    sortAfterDelete();
+                    break;
+
+                case 5:
                     inventoryProcess = false;
                     break;
 
@@ -347,8 +433,67 @@ public class Main {
         }
     }
 
+    //menu 3 : returning function
+    static void returnItem() {
+        boolean subMenuReturn = true;
+        itemIndex = frameInventory.length;
+        int itemStock;
+        showBorrow();
+
+        while (subMenuReturn) {
+            System.out.print("Search item code to return : ");
+            itemCode = sc.nextLine();
+
+            itemIndex = findBorrowing(frameBorrowing, itemCode);
+            if (itemIndex == -1) {
+                System.out.println("Item not found!");
+            } else {
+                System.out.println("\nItem found! Here's item that you want");
+                System.out.println("| No | Borrowing date | Item code | Item Name      | Amount |");
+                System.out.printf("| %-2d | %-14s | %-9s | %-14s | %-6s |\n", (itemIndex + 1), frameBorrowing[itemIndex][0], frameBorrowing[itemIndex][1], frameBorrowing[itemIndex][2], frameBorrowing[itemIndex][3]);
+                System.out.print("How many stock to return : ");
+                itemStock = sc.nextInt();
+                sc.nextLine();
+
+                if (Integer.parseInt(frameBorrowing[itemIndex][3]) >= itemStock) {
+                    frameBorrowing[itemIndex][3] = String.valueOf(Integer.parseInt(frameBorrowing[itemIndex][3]) - itemStock);
+
+                    String yesNo;
+                    for (int i = 0; i < frameInventory.length; i++) {
+                        if (frameInventory[i][0].equals(itemCode)) {
+                            frameInventory[i][2] = String.valueOf(Integer.parseInt(frameInventory[i][2]) + itemStock);
+                            System.out.println("Item returned!");
+                            System.out.print("Do you want to return again? ( y / n ) : ");
+                            yesNo = sc.nextLine();
+
+
+
+                            if (yesNo.equalsIgnoreCase("n")) {
+                                break;
+                            }
+                        }
+                    }
+                    showInventory();
+                    break;
+                } else {
+                    System.out.println("Out of borrowed amount!");
+                }
+
+                System.out.print("Do you want to return again? ( y / n ) : ");
+                yesNo = sc.nextLine();
+                if (yesNo.equalsIgnoreCase("n")) {
+                    subMenuReturn = false;
+                }
+            }
+        }
+    }
+
+
     //main program
-    static void mainProgram() {
+    public static void main(String[] args) {
+        setFrameItem();
+        String line = "===========================================";
+        System.out.printf("%s\n\tWANGGSAFF APPLIED SCIENCE UNIVERSITY \n%s", line, line);
         mainProcess = true;
         while (mainProcess) {
             System.out.println("\nPLEASE LOGIN TO CONTINUE ACCESS THE PROGRAM \n1. Login \n2. Exit Program");
@@ -363,8 +508,8 @@ public class Main {
                     if (validationUser) {
                         System.out.println("\nWELCOME ADMIN!!");
                         while (menuProcess) {
-                            System.out.println("\nMENU \n1. Inventory Data \n2. Borrowing Data \n3. Logout");
-                            System.out.print("Choose menu 1 - 3 : ");
+                            System.out.println("\nMENU \n1. Inventory Data \n2. Borrowing Data \n3. Returning \n4. Logout");
+                            System.out.print("Choose menu 1 - 4 : ");
                             menu = sc.nextInt();
                             sc.nextLine();
 
@@ -378,6 +523,10 @@ public class Main {
                                     break;
 
                                 case 3:
+                                    returnItem();
+                                    break;
+
+                                case 4:
                                     menuProcess = false;
                                     break;
 
@@ -392,7 +541,7 @@ public class Main {
                     }
                     break;
 
-                case 2 :
+                case 2:
                     mainProcess = false;
                     break;
 
@@ -402,13 +551,6 @@ public class Main {
             }
         }
     }
-
-
-    public static void main(String[] args) {
-        setFrameItem();
-        String line = "===========================================";
-        System.out.printf("%s\n\t\t\tPROCUREMENT OF CAMPUS \n%s", line, line);
-        mainProgram();
-    }
 }
+
 
