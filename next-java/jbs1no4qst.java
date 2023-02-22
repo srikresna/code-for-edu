@@ -14,7 +14,7 @@ public class jbs1no4qst {
         }
     }
     //function to display fibonacci row using recursion
-static int fibonacciRecursion(int n){
+    static int fibonacciRecursion(int n){
         if (n == 0 || n == 1) {
             return n;
         } else {
