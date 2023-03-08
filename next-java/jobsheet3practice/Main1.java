@@ -4,9 +4,12 @@ import java.util.Scanner;
 public class Main1 {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        Cube[] cubesArray = new Cube[2];
-        Blocks[] blocksArray = new Blocks[2];
-        Cylinder[] cylindersArray = new Cylinder[2];
+        System.out.print("How much array length ? ");
+        int length = sc.nextInt();
+
+        Cube[] cubesArray = new Cube[length];
+        Blocks[] blocksArray = new Blocks[length];
+        Cylinder[] cylindersArray = new Cylinder[length];
 
         for(int i = 0; i < 2; i++) {
             cubesArray[i] = new Cube();

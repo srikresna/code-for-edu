@@ -24,7 +24,7 @@ public class jbs1no3qst {
         System.out.println("====================");
         System.out.println("Stock has decreased since the flowers are wither dead or dead");
         int income = 0;
-        for (int i = 0; i < amount[0].length; i++) {
+        for (int i = 0; i < amount.length; i++) {
             income += amount[0][i] * prices[i];
         }
         System.out.println("Income of Royal Garden 1 if all flowers are sold out = " + income);

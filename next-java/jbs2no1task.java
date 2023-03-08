@@ -1,6 +1,7 @@
 public class jbs2no1task {
     double phi;
     double r;
+    double i;
 
     jbs2no1task(){
     }

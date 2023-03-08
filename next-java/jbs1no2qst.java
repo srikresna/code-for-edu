@@ -7,6 +7,9 @@ public class jbs1no2qst {
     static String[] days = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
     static int getNIM() {
         n = Integer.parseInt(nim.substring(nim.length() - 2));
+        if (n < 10) {
+            n+=10;
+        }
         return n;
     }
     static int getDays(){
@@ -21,7 +24,7 @@ public class jbs1no2qst {
         System.out.print("Enter your NIM: ");
         nim = scanner.next();
         System.out.println("====================");
-        System.out.printf("n : %d\n", getNIM());
+        System.out.print("n : " + getNIM());
         getDays();
     }
 }
