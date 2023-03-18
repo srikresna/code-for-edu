@@ -32,4 +32,24 @@ public class Jbsno4 {
         return hasil;
     }
 
+    //method print satu calon suara terbanyak
+    public String getWinner() {
+        String winner = "";
+        int max = 0;
+        for (int i = 0; i < elemen; i++) {
+            int count = 0;
+            for (int j = 0; j < elemen; j++) {
+                if (name[i].equals(name[j])) {
+                    count++;
+                }
+            }
+            if (count > max) {
+                max = count;
+                winner = name[i];
+            }
+        }
+        return winner;
+    }
+
+
 }

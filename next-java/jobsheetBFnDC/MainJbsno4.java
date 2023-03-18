@@ -21,5 +21,7 @@ public class MainJbsno4 {
         System.out.println("Algorithm DC");
         System.out.println("The winner from election sort from the highest voting is : " 
                 + jbs.totalDC(jbs.name, 0, jbs.elemen -1));
+        //print the winner
+        System.out.println("The winner from election is : " + jbs.getWinner());
     }
 }
