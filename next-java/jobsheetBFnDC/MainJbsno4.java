@@ -6,7 +6,7 @@ public class MainJbsno4 {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         System.out.println("===========================================");
-        System.out.print("Input the number of candidate = ");
+        System.out.print("Input the number of votes = ");
         int totElemen = sc.nextInt();
         Jbsno4 jbs = new Jbsno4(totElemen);
         jbs.elemen = totElemen;
@@ -21,7 +21,6 @@ public class MainJbsno4 {
         System.out.println("Algorithm DC");
         System.out.println("The winner from election sort from the highest voting is : " 
                 + jbs.totalDC(jbs.name, 0, jbs.elemen -1));
-        //print the winner
         System.out.println("The winner from election is : " + jbs.getWinner());
     }
 }

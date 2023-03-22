@@ -17,7 +17,6 @@ public class Jbsno4 {
         elemen = element;
         name = new String[elemen];
     }
-
     public String totalDC(String[] name, int left, int right) {
         int mid;
         String hasil = "";
@@ -27,12 +26,10 @@ public class Jbsno4 {
             mid = (left + right) / 2;
             String hasil1 = totalDC(name, left, mid);
             String hasil2 = totalDC(name, mid + 1, right);
-            hasil = hasil1 + hasil2;
+            hasil = hasil1 + " " + hasil2;
         }
         return hasil;
     }
-
-    //method print satu calon suara terbanyak
     public String getWinner() {
         String winner = "";
         int max = 0;
@@ -50,6 +47,4 @@ public class Jbsno4 {
         }
         return winner;
     }
-
-
 }
