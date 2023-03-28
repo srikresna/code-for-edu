@@ -2,7 +2,7 @@ package jobsheetSorting;
 
 import java.util.Scanner;
 
-public class MainLanguage {
+public class MainLeague {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         PremierLeagueService pl = new PremierLeagueService();
