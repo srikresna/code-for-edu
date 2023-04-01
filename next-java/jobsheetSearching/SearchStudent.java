@@ -1,6 +1,5 @@
 package jobsheetSearching;
 
-import jobsheet3practice.Student;
 
 public class SearchStudent {
     Students[] listStd = new Students[5];
