@@ -3,7 +3,6 @@
 
 import java.util.Scanner;
 
-import org.omg.PortableInterceptor.NON_EXISTENT;
 
 public class quiz1 {
 
