@@ -35,7 +35,7 @@ public class ShoppingBillMain {
             sc.nextLine();
         }
 
-        //looping for display shoppingbill detail
+        //looping for display shoppingbill detail from user input
         for (int i = 0; i < bills.length; i++) {
             System.out.println("\n=======================================\n");
             System.out.println("Customer " + (i + 1));
@@ -58,7 +58,7 @@ public class ShoppingBillMain {
         //program to calculate the average total payment for shopping bill that has discount 17%
         double total = 0;
         int count = 0;
-        //check if there are bill use coupon GIFT17
+        // check in the array using looping if there is bills are use coupon GIFT17, then calculate
         for (int i = 0; i < bills.length; i++) {
             if (bills[i].couponCode.equals("GIFT17")) {
                 total += bills[i].calcTotalPayment();
@@ -70,7 +70,7 @@ public class ShoppingBillMain {
         //program to display customer ID and customer name who has the biggest total payment
         int max = 0;
         int index = 0;
-        //check the biggest total payment with loop
+        //check the biggest total payment in the array using loop
         for (int i = 0; i < bills.length; i++) {
             if (bills[i].calcTotalPayment() > max) {
                 max = bills[i].calcTotalPayment();
