@@ -33,7 +33,6 @@ public class week6no1 {
             } else {
                 price = 500000;
             }
-
         } else {
             System.out.println("Invalid shipment service, please choose correctly!");
         }
