@@ -37,7 +37,7 @@ public class MainStudent {
         System.out.println("-----------------------------");
         System.out.print("Search Student by NIM :");
         int search = s.nextInt();
-        System.out.println("Usign Sequential Search");
+        System.out.println("Using Sequential Search");
         int position = data.findSeqSearch(search);
 
         data.showPosition(search, position);
@@ -45,10 +45,22 @@ public class MainStudent {
 
         System.out.println("===================================");
         System.out.print("Search Student by NIM :");
+        int search2 = s.nextInt();
         System.out.println("Usign Binary Search");
-        int position1 = data.findBinarySearch(search, 0, amountStudent - 1);
+        //sort first
+        data.selectionSort();
+        int position1 = data.findBinarySearch(search2, 0, data.listStd.length - 1);
 
-        data.showPosition(search, position1);
-        data.showData(search, position1);
+        data.showPosition(search2, position1);
+        data.showData(search2, position1);
+
+        System.out.println("===================================");
+        System.out.print("Search Student by Name :");
+        String search3 = s1.nextLine();
+        System.out.println("Usign Sequential Search");
+        int position2 = data.findNameSequentialSearch(search3);
+
+        data.showPositionName(search3, position2);
+        data.showDataName(search3, position2);
     }
 }

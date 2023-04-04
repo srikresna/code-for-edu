@@ -46,6 +46,22 @@ public class SearchStudent {
             System.out.println("Data " + x + " is not found");
         }
     }
+
+
+    public int selectionSort() {
+        for (int i = 0; i < listStd.length - 1; i++) {
+            int idxMin = i;
+            for (int j = i + 1; j < listStd.length; j++) {
+                if (listStd[j].nim < listStd[idxMin].nim) {
+                    idxMin = j;
+                }
+            }
+            Students temp = listStd[idxMin];
+            listStd[idxMin] = listStd[i];
+            listStd[i] = temp;
+        }
+        return -1;
+    }
     public int findBinarySearch(int cari, int left, int right) {
         int mid;
         if (right >= left) {
@@ -57,6 +73,35 @@ public class SearchStudent {
             } else {
                 return findBinarySearch(cari, mid + 1, right);
             }
+        }
+        return -1;
+    }
+    public int findNameSequentialSearch(String cari) {
+        for (int i = 0; i < listStd.length; i++) {
+            if (listStd[i].name.equalsIgnoreCase(cari)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public int showPositionName(String cari, int pos) {
+        if (pos != -1) {
+            System.out.println("Data: " + cari + " found in index " + pos);
+        } else {
+            System.out.println("Data: " + cari + "is not found");
+        }
+        return -1;
+    }
+
+    public int showDataName(String cari, int pos) {
+        if (pos != -1) {
+            System.out.println("NIM \t :" + listStd[pos].nim);
+            System.out.println("Name \t :" + cari);
+            System.out.println("Age \t :" + listStd[pos].age);
+            System.out.println("GPA \t :" + listStd[pos].gpa);
+        } else {
+            System.out.println("Data " + cari + " is not found");
         }
         return -1;
     }
