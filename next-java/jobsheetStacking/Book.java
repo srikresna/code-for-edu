@@ -4,11 +4,11 @@ public class Book {
     String title, authorName;
     int publishedYear, pagesAmount, price;
 
-    public Book(String tt, String nm, int yr, int pam, int pr) {
-        this.title = tt;
-        this.authorName = nm;
-        this.publishedYear = yr;
-        this.pagesAmount = pam;
-        this.price = pr;
+    public Book(String title, String authorName, int publishedYear, int pagesAmount, int price) {
+        this.title = title;
+        this.authorName = authorName;
+        this.publishedYear = publishedYear;
+        this.pagesAmount = pagesAmount;
+        this.price = price;
     }
 }

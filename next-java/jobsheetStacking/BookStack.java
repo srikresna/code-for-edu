@@ -1,13 +1,13 @@
 package jobsheetStacking;
 
-public class Stack {
+public class BookStack {
     int size;
     int top;
-    int data[];
+    Book data[];
 
-    public Stack(int size) {
+    public BookStack(int size) {
         this.size = size;
-        data = new int[size];
+        data = new Book[size];
         top = -1;
     }
     public boolean isEmpty() {
@@ -24,7 +24,7 @@ public class Stack {
             return false;
         }
     }
-    public void push(int dt) {
+    public void push(Book dt) {
         if (!isFull()) {
             top++;
             data[top] = dt;
@@ -34,9 +34,9 @@ public class Stack {
     }
     public void pop() {
         if (!isEmpty()) {
-            int x = data[top];
+            Book x = data[top];
             top--;
-            System.out.println("Remove data : " + x);
+            System.out.println("Remove data : " + x.title + " " + x.authorName + " " + x.publishedYear + " " + x.pagesAmount + " " + x.price);
         } else {
             System.out.println("Stack is empty");
         }
@@ -47,7 +47,7 @@ public class Stack {
     public void print() {
         System.out.println("Data in stack : ");
         for (int i = top; i >= 0; i--) {
-            System.out.println(data[i] + " ");
+            System.out.println(data[i].title + " " + data[i].authorName + " " + data[i].publishedYear + " " + data[i].pagesAmount + " " + data[i].price);
         }
         System.out.println("");
     }
