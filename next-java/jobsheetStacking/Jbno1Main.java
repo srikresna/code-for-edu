@@ -8,7 +8,7 @@ public class Jbno1Main {
         System.out.print("insert Sentence : ");
         String sentence = sc.nextLine();
         Jbno1 jbno1 = new Jbno1(sentence);
-
+        
         for (int i = 0; i < sentence.length(); i++) {
             jbno1.push(sentence.charAt(i));
         }
