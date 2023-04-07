@@ -3,14 +3,7 @@ package jobsheetStacking;
 import java.util.Scanner;
 
 public class ReceiptMain {
-    // Every Sunday, Dewi shops to a supermarket that is in her residential area.
-    // Everytime she
-    // finishes, she keeps the receipt of what she has bought in a wardrobe. After 2
-    // months, She
-    // had 8 receipts. She plans to trade her 5 receipts in exchange for a voucher.
-    // Create a program using stack implementation to store Dewi’s receipt. As well
-    // as the
-    // retrieving the receipts.
+
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         ReceiptStack stack = new ReceiptStack(10);
