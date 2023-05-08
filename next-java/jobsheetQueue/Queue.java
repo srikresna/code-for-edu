@@ -1,10 +1,7 @@
 package jobsheetQueue;
 
 public class Queue {
-    public int max;
-    public int size;
-    public int front;
-    public int rear;
+    public int max, size, front, rear;
     public int[] Q;
 
     public Queue(int n) {
