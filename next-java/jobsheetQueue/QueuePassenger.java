@@ -6,7 +6,6 @@ public class QueuePassenger {
     public int front;
     public int rear;
     public Passengers[] Q;
-    public Object p;
 
     public QueuePassenger(int n) {
         max = n;
