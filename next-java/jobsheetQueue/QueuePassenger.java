@@ -1,16 +1,20 @@
 package jobsheetQueue;
 
-public class Queue {
-    public int max, size, front, rear;
-    public int[] Q;
+public class QueuePassenger {
+    public int max;
+    public int size;
+    public int front;
+    public int rear;
+    public Passengers[] Q;
+    public Object p;
 
-    public Queue(int n) {
+    public QueuePassenger(int n) {
         max = n;
         Create();
     }
 
     public void Create() {
-        Q = new int[max];
+        Q = new Passengers[max];
         size = 0;
         front = rear = -1;
     }
@@ -33,7 +37,9 @@ public class Queue {
 
     public void peek() {
         if (!IsEmpty()) {
-            System.out.println("Elemen terdepan: " + Q[front]);
+            System.out.println("The first element : " + Q[front].name + " "
+            + Q[front].cityOrigin + " " + Q[front].cityDestination + " "
+            + Q[front].ticketAmount + " " + Q[front].price);
         } else {
             System.out.println("Queue is still empty");
         }
@@ -45,7 +51,9 @@ public class Queue {
         } else {
             int i = front;
             while (i != rear) {
-                System.out.print(Q[i] + " ");
+                System.out.print("The first element : " + Q[front].name + " "
+                + Q[front].cityOrigin + " " + Q[front].cityDestination + " "
+                + Q[front].ticketAmount + " " + Q[front].price);
                 i = (i + 1) % max;
             }
             System.out.println(Q[i] + " ");
@@ -63,7 +71,7 @@ public class Queue {
         }
     }
 
-    public void Enqueue (int data) {
+    public void Enqueue (Passengers data) {
         if (IsFull()) {
             System.out.println("Queue is already full");
         } else {
@@ -81,8 +89,44 @@ public class Queue {
         }
     }
 
-    public int Dequeue() {
-        int data = 0;
+    //modifying Dequeue method
+    public Passengers Dequeue() {
+        if (IsEmpty()) {
+            System.out.println("Queue is still empty");
+            return null;
+        } else {
+            Passengers data = Q[front];
+            size--;
+            if (IsEmpty()) {
+                front = rear = -1;
+            } else {
+                if (front == max - 1) {
+                    front = 0;
+                } else {
+                    front++;
+                }
+            }
+            System.out.println("Data removed: " + data.name + " " + data.cityOrigin + " " +
+                    data.cityDestination + " " + data.ticketAmount + " " + data.price);
+            return data;
+        }
+    }
+    
+    //peekRear method
+    public void peekRear() {
+        if (!IsEmpty()) {
+            System.out.println("The last element: " + Q[rear].name + " " +
+                    Q[rear].cityOrigin + " " + Q[rear].cityDestination + " " +
+                    Q[rear].ticketAmount + " " + Q[rear].price);
+        } else {
+            System.out.println("Queue is still empty");
+        }
+    }
+    
+
+    /*
+    public Passengers Dequeue() {
+        Passengers data = new Passengers("", "", "", 0, 0);
         if (IsEmpty()) {
             System.out.println("Queue is still empty");
         } else {
@@ -100,4 +144,5 @@ public class Queue {
         }
         return data;
     }
+    */
 }
