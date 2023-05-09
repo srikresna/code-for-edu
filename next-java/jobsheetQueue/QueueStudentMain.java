@@ -10,13 +10,13 @@ public class QueueStudentMain {
         System.out.println("3. Check the first queue");
         System.out.println("4. Check the last queue");
         System.out.println("5. Check the queue position");
-        System.out.println("6. Print all queue");
+        System.out.println("6. Print queue in a position");
         System.out.println("=========================");
     }
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        System.out.println("Insert total students = ");
+        System.out.print("Insert total students = ");
         int max = sc.nextInt();
         QueueStudent stdQueue = new QueueStudent(max);
 
@@ -28,6 +28,7 @@ public class QueueStudentMain {
                 case 1:
                     System.out.print("NIM : ");
                     String nim = sc.nextLine();
+                    sc.nextLine();
                     System.out.print("Name : ");
                     String name = sc.nextLine();
                     System.out.print("Class Number : ");
@@ -53,9 +54,10 @@ public class QueueStudentMain {
                     stdQueue.peekRear();
                     break;
                 case 5:
-                    System.out.print("NIM : ");
-                    nim = sc.nextLine();
-                    stdQueue.peekPosition(nim);
+                    System.out.println("Input NIM : ");
+                    String nimSearch = sc.nextLine();
+                    sc.nextLine();
+                    stdQueue.peekPosition(nimSearch);
                     break;
                 case 6:
                     System.out.println("Input Position : ");

@@ -12,7 +12,8 @@ public class QueueStudent {
     public void create() {
         stdQueue = new Student[max];
         size = 0;
-        front = rear = -1;
+        front = 0;
+        rear = -1;
     }
 
     public boolean isEmpty() {
@@ -67,6 +68,7 @@ public class QueueStudent {
             }
             System.out.println("Data removed: " + data.nim + " " + data.name + " "
                     + data.classNumber + " " + data.gpa);
+            System.out.println();
             return data;
         }
     }
@@ -80,6 +82,7 @@ public class QueueStudent {
                 System.out.print("The first element : " + stdQueue[front].nim + " "
                     + stdQueue[front].name + " " + stdQueue[front].classNumber + " "
                     + stdQueue[front].gpa);
+                System.out.println();
                 i = (i + 1) % max;
             }
             System.out.println(stdQueue[i] + " ");
@@ -92,6 +95,7 @@ public class QueueStudent {
             System.out.print("The first element : " + stdQueue[front].nim + " "
             + stdQueue[front].name + " " + stdQueue[front].classNumber + " "
             + stdQueue[front].gpa);
+            System.out.println();
         } else {
             System.out.println("Queue is still empty");
         }
@@ -102,6 +106,7 @@ public class QueueStudent {
             System.out.print("The last element : " + stdQueue[rear].nim + " "
             + stdQueue[rear].name + " " + stdQueue[rear].classNumber + " "
             + stdQueue[rear].gpa);
+            System.out.println();
         } else {
             System.out.println("Queue is still empty");
         }
@@ -109,38 +114,31 @@ public class QueueStudent {
 
     public void peekPosition(String nim) {
         if (!isEmpty()) {
-            int i = front;
-            while (i != rear) {
-                if (nim.equalsIgnoreCase(stdQueue[i].nim)) {
-                    System.out.println("The element with with nim " + nim + " is in position " + i);
-                    System.out.println("The student data is " + stdQueue[i].nim + " " + stdQueue[i].name 
-                    + " " + stdQueue[i].classNumber + " " + stdQueue[i].gpa);
+            for (int i = front; i <= rear; i++) {
+                if (stdQueue[i].nim.equals(nim)) {
+                    System.out.println("The element with nim " + nim + " is in position " + i);
+                    System.out.println("The element is " + stdQueue[i].nim + " " + stdQueue[i].name 
+                        + " " + stdQueue[i].classNumber + " " + stdQueue[i].gpa);
                     System.out.println("---------------------------------------------");
+                    return;
                 }
-                i = (i + 1) % max;
             }
-
         } else {
             System.out.println("Queue is still empty");
         }
     }
-
+    
     public void printStudent(int position) {
         if (!isEmpty()) {
-            int i = front;
-            while (i != rear) {
-                if (position == i) {
-                    System.out.println("The element in position " + position + " is " + stdQueue[i].nim + " " + stdQueue[i].name 
-                    + " " + stdQueue[i].classNumber + " " + stdQueue[i].gpa);
-                    System.out.println("---------------------------------------------");
-                }
-                i = (i + 1) % max;
+            if (position < front || position > rear) {
+                System.out.println("Position is not found");
+            } else {
+                System.out.println("The element with position " + position + " is " + stdQueue[position].nim + " " + stdQueue[position].name 
+                    + " " + stdQueue[position].classNumber + " " + stdQueue[position].gpa);
+                System.out.println("---------------------------------------------");
             }
-
         } else {
             System.out.println("Queue is still empty");
         }
     }
-
-
 }
