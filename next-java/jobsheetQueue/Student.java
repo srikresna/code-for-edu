@@ -11,14 +11,4 @@ public class Student {
         this.classNumber = classNumber;
         this.gpa = gpa;
     }
-
-    //method nim
-    public String getNim() {
-        return nim;
-    }
-
-    //nim
-    public void setNim(String nim) {
-        this.nim = nim;
-    }
 }
