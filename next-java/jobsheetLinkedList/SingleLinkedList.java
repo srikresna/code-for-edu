@@ -159,4 +159,25 @@ public class SingleLinkedList {
             }
         }
     }
+
+    //assignment no.1
+    public void insertBefore(int key, int input) {
+        Node ndInput = new Node(input, null);
+        Node temp = head;
+        while (temp != null) {
+            if (temp.data == key) {
+                ndInput.next = temp.next;
+                temp.next = ndInput;
+                if (ndInput.next == null) {
+                    tail = ndInput;
+                }
+                break;
+            } else if (temp.next.data == key) {
+                ndInput.next = temp.next;
+                temp.next = ndInput;
+                break;
+            }
+            temp = temp.next;
+        }
+    }
 }
