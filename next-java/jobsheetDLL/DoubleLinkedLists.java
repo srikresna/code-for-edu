@@ -142,4 +142,34 @@ public class DoubleLinkedLists {
             size--;
         }
     }
+
+    // 3rd lab activity
+    public int getFirst() throws Exception{
+        if (isEmpty()) {
+            throw new Exception("Linked list still empty");
+        }
+        return head.data;
+    }
+
+    public int getLast(int index) throws Exception{
+        if (isEmpty()) {
+            throw new Exception("Linked list still empty");
+        }
+        Node tmp = head;
+        while (tmp.next != null) {
+            tmp = tmp.next;
+        }
+        return tmp.data;
+    }
+
+    public int get(int index) throws Exception {
+        if (isEmpty()) {
+            throw new Exception ("Linked list still empty");
+        }
+        Node tmp = head;
+        for (int i = 0; i < index; i++) {
+            tmp = tmp.next;
+        }
+        return tmp.data;
+    }
 }
