@@ -21,5 +21,23 @@ public class DoubleLinkdListsMain {
         dll.clear();
         dll.print();
         System.out.println("Size : " + dll.size());
+        // 2nd lab activity
+        dll.addLast(50);
+        dll.addLast(40);
+        dll.addLast(10);
+        dll.addLast(20);
+        System.out.println("Size : " + dll.size());
+        System.out.println("===============================");
+        dll.removeFirst();
+        dll.print();
+        System.out.println("Size : " + dll.size());
+        System.out.println("===============================");
+        dll.removeLast();
+        dll.print();
+        System.out.println("Size : " + dll.size());
+        System.out.println("===============================");
+        dll.remove(1);
+        dll.print();
+        System.out.println("Size : " + dll.size());
     }
 }
