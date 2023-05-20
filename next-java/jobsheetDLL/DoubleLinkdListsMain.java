@@ -1,10 +1,9 @@
 package jobsheetDLL;
 
-import javax.xml.transform.Source;
-
 public class DoubleLinkdListsMain {
     public static void main(String[] args) throws Exception {
         DoubleLinkedLists dll = new DoubleLinkedLists();
+        
         dll.print();
         System.out.println("Size : " + dll.size());
         System.out.println("==============================");
@@ -39,6 +38,7 @@ public class DoubleLinkdListsMain {
         dll.remove(1);
         dll.print();
         System.out.println("Size : " + dll.size());
+        
         //3rd lab activity
         dll.print();
         System.out.println("size : " + dll.size());
