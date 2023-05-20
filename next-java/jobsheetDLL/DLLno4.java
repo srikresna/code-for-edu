@@ -169,7 +169,6 @@ public class DLLno4 {
             return;
         }
     
-        int size = getSize();
         boolean swapped;
     
         do {
@@ -178,7 +177,6 @@ public class DLLno4 {
     
             while (current.next != null) {
                 if (current.gpa < current.next.gpa) {
-                    // Tukar posisi elemen
                     double tempGPA = current.gpa;
                     String tempNIM = current.nim;
                     String tempName = current.name;
@@ -196,26 +194,5 @@ public class DLLno4 {
                 current = current.next;
             }
         } while (swapped);
-    }
-    
-    public int getSize() {
-        int count = 0;
-        Student current = head;
-        while (current != null) {
-            count++;
-            current = current.next;
-        }
-        return count;
-    }
-
-    private void addToHistory(String data) {
-        HistoryNode newHistoryNode = new HistoryNode(data);
-        if (historyHead == null) {
-            historyHead = historyTail = newHistoryNode;
-        } else {
-            newHistoryNode.prev = historyTail;
-            historyTail.next = newHistoryNode;
-            historyTail = newHistoryNode;
-        }
     }
 }
