@@ -123,6 +123,7 @@ public class DLLno1 {
                 System.out.print(tmp.data + "\t");
                 tmp = tmp.next;
             }
+            System.out.println();
         } else {
             System.out.println("Linked list is empty");
         }

@@ -7,7 +7,6 @@ public class DLLno4Main {
         Scanner sc = new Scanner(System.in);
         dll.addFirst("123", "Anang", 2.77);
         dll.addLast("233", "Suparjo", 3.7);
-        dll.addAtIndex("743", "Freddy", 2.9, 3);
         int choice = 0;
 
         do {

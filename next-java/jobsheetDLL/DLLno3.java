@@ -35,7 +35,7 @@ public class DLLno3 {
             head = head.next;
             head.prev = null;
         }
-        queueLength++;
+        queueLength--;
     }   
     public void displayQueue() {
         if (isEmpty()) {
@@ -48,6 +48,7 @@ public class DLLno3 {
             System.out.printf("| %-8s | %-10s |\n", current.queueNumber, current.name);
             current = current.next;
         }
+        //print queue left
         System.out.println("Queue left : " + queueLength);
     }
 }

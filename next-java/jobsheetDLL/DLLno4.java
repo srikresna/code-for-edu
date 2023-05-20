@@ -176,7 +176,7 @@ public class DLLno4 {
             Student current = head;
     
             while (current.next != null) {
-                if (current.gpa < current.next.gpa) {
+                if (current.gpa > current.next.gpa) {
                     double tempGPA = current.gpa;
                     String tempNIM = current.nim;
                     String tempName = current.name;
