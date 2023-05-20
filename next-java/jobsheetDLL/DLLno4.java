@@ -102,24 +102,20 @@ public class DLLno4 {
             System.out.println("No data to remove!");
             return;
         }
-
         if (index == 0) {
             removeFirst();
             return;
         }
-
         int count = 0;
         Student current = head;
         while (current != null && count < index) {
             current = current.next;
             count++;
         }
-
         if (current == null) {
             System.out.println("Invalid index!");
             return;
         }
-
         if (current == tail) {
             removeLast();
         } else {
@@ -168,9 +164,7 @@ public class DLLno4 {
             System.out.println("No data available in the list.");
             return;
         }
-    
         boolean swapped;
-    
         do {
             swapped = false;
             Student current = head;
