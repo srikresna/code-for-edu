@@ -15,7 +15,7 @@ public class Circle {
     }
     public static void main(String[] args) {
         System.out.print("Input radius = ");
-        double radius = input.nextInt();
+double radius = input.nextInt();
         System.out.println("Circumference is " + circumference(radius));
         System.out.println("Area is " + area(radius));
     }
