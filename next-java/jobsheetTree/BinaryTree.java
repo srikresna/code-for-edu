@@ -38,7 +38,72 @@ public class BinaryTree {
         }
     }
 
-    boolean find(int data){
+    // add node with recursion method
+    void addRecursive(Node current, int data) {
+        if (isEmpty()) {
+            root = new Node(data);
+        } else {
+            if (data < current.data) {
+                if (current.left != null) {
+                    addRecursive(current.left, data);
+                } else {
+                    current.left = new Node(data);
+                }
+            } else if (data > current.data) {
+                if (current.right != null) {
+                    addRecursive(current.right, data);
+                } else {
+                    current.right = new Node(data);
+                }
+            } else { // data is already exist
+                return;
+            }
+        }
+    }
+
+    // display the smallest value and the largest value in the tree
+    void displayMinMax() {
+        if (!isEmpty()) {
+            Node current = root;
+            while (current.left != null) {
+                current = current.left;
+            }
+            System.out.println("Smallest value: " + current.data);
+            current = root;
+            while (current.right != null) {
+                current = current.right;
+            }
+            System.out.println("Largest value: " + current.data);
+        } else {
+            System.out.println("Tree is empty!");
+        }
+    }
+
+
+    // display data in the leaf
+    void displayLeaf(Node current) {
+        if (current != null) {
+            if (current.left == null && current.right == null) {
+                System.out.print(current.data + " ");
+            }
+            displayLeaf(current.left);
+            displayLeaf(current.right);
+        }
+    }
+
+    // display the number of leaves in the tree
+    int countLeaf(Node current) {
+        if (current == null) {
+            return 0;
+        }
+        if (current.left == null && current.right == null) {
+            return 1;
+        } else {
+            return countLeaf(current.left) + countLeaf(current.right);
+        }
+    }
+
+    boolean find(int data) {
         boolean hasil = false;
         Node current = root;
         while (current != null) {
