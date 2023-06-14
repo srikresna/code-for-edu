@@ -45,10 +45,24 @@ public class Graph {
     }
 
     public void removeEdge(int source, int destination) throws Exception {
-        for (int i = 0; i < vertex; i++) {
-            if (i == destination) {
-                list[source].remove(destination);
+        boolean edgeFound = false;
+        for (int i = 0; i < list[source].size(); i++) {
+            if (list[source].get(i) == destination) {
+                list[source].remove(i);
+                // remove back edge (for undirected)
+                for (int j = 0; j < list[destination].size(); j++) {
+                    if (list[destination].get(j) == source) {
+                        list[destination].remove(j);
+                        break;
+                    }
+                }
+                edgeFound = true;
+                System.out.println("Edge removed between " + source + " and " + destination);
+                break;
             }
+        }
+        if (!edgeFound) {
+            System.out.println("Edge between " + source + " and " + destination + " doesn't exist");
         }
     }
 
@@ -70,5 +84,9 @@ public class Graph {
             }
         }
         System.out.println(" ");
+    }
+
+    public boolean graphType(boolean graph) {
+        return graph;
     }
 }
