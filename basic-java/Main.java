@@ -11,23 +11,22 @@ public class Main {
     static String[] getUser = new String[2];
     static String[][] dataOrder = {
             { "A1", "sunarmi", "nasi kotak premium", "30", "30000", "10000", "12-12-2012", "lunas", "910000" },
-            { "A2", "sutejo", "nasi kotak premium", "30", "30000", "10000", "12-12-2012", "lunas", "910000" },
-            { "A3", "narmi", "nasi kotak premium", "30", "30000", "10000", "12-12-2012", "lunas", "910000" },
-            { "A4", "paijo", "nasi kotak premium", "30", "30000", "10000", "12-12-2012", "belum lunas", "910000" },
+            { "A2", "sutejo", "nasi kotak klasik", "30", "30000", "10000", "12-12-2013", "lunas", "910000" },
+            { "A3", "narmi", "nasi kotak biasa", "30", "30000", "10000", "12-12-2014", "lunas", "910000" },
     };
 
     static String[][] foodMenu = {
-        {"nasi kotak premium", "30000"},
-        {"nasi kotak klasik", "40000"},
-        {"nasi kotak biasa", "20000"},
-        {"nasi kotak murah", "10000"},
+            { "nasi kotak premium", "30000" },
+            { "nasi kotak klasik", "40000" },
+            { "nasi kotak biasa", "20000" },
+            { "nasi kotak murah", "10000" },
     };
 
     static String[][] shippingCostTable = {
-        {"0 - 1 km", "10000"},
-        {"1 - 2 km", "20000"},
-        {"2 - 3 km", "30000"},
-        {"luar kota", "40000"},
+            { "0 - 1 km", "10000" },
+            { "1 - 2 km", "20000" },
+            { "2 - 3 km", "30000" },
+            { " > 3 km", "40000" },
     };
     static String[][] arrayOrder = new String[50][9];
 
@@ -64,7 +63,8 @@ public class Main {
     // print data transaction
     static void detailTransactions() {
         System.out
-                .println("\n=========================================================== DETAIL ===========================================================");
+                .println(
+                        "\n============================================================ DETAIL ============================================================");
         System.out.println(
                 "| No | Code | Customer Name | Order              | Amount | Price      | Shipping Cost | Date       | Status      | Total      |");
         for (int i = 0; i < arrayOrder.length; i++) {
@@ -77,7 +77,8 @@ public class Main {
         }
 
         // print customer yang belum lunas
-        System.out.println("\n==================================================== CUSTOMER BELUM LUNAS ====================================================");
+        System.out.println(
+                "\n===================================================== CUSTOMER BELUM LUNAS =====================================================");
         System.out.println(
                 "| No | Code | Customer Name | Order              | Amount | Price      | Shipping Cost | Date       | Status      | Total      |");
         for (int i = 0; i < arrayOrder.length; i++) {
@@ -89,7 +90,8 @@ public class Main {
             }
         }
 
-        System.out.println("\n======================================= SEGERA HIMBAU CUSTOMER UNTUK MELUNASI PESANANNYA =======================================");
+        System.out.println(
+                "\n======================================= SEGERA HIMBAU CUSTOMER UNTUK MELUNASI PESANANNYA =======================================");
     }
 
     // function input new customer
@@ -124,7 +126,7 @@ public class Main {
                 }
 
                 System.out.println("\n===== ONGKOS KIRIM =====");
-                for (int j =0; j < shippingCostTable.length; j++) {
+                for (int j = 0; j < shippingCostTable.length; j++) {
                     System.out.printf("%d. %s - Rp.%s\n", (j + 1), shippingCostTable[j][0], shippingCostTable[j][1]);
                 }
 
@@ -152,23 +154,140 @@ public class Main {
                 arrayOrder[i][8] = String.valueOf(total);
                 System.out.println();
                 System.out.println("---------------------- STRUCK ------------------------");
-                System.out.println("\t\t" + arrayOrder[i][6]);
-                System.out.println("\t\tTransaction Code " + arrayOrder[i][0]);
+                System.out.println("\t\t\t\t" + arrayOrder[i][6]);
+                System.out.println("\t\t\t\tTransaction Code " + arrayOrder[i][0]);
                 System.out.println("Name : " + arrayOrder[i][1]);
                 System.out.println("Order : " + arrayOrder[i][2]);
                 System.out.println("Amount : " + arrayOrder[i][3]);
-                System.out.println("Price : " + arrayOrder[i][4]);
-                System.out.println("Shipping Cost : " + arrayOrder[i][5]);
+                System.out.println("Price : Rp. " + arrayOrder[i][4]);
+                System.out.println("Shipping Cost : Rp. " + arrayOrder[i][5]);
                 System.out.println("------------------------------------------------------");
-                System.out.println("\t\t\t\tTotal : " + arrayOrder[i][8]);
+                System.out.println("\t\t\t\tTotal : Rp. " + arrayOrder[i][8]);
                 System.out.println("================ STATUS : " + arrayOrder[i][7] + " ================");
                 System.out.println("=== MOHON SELESAIKAN PEMBAYARAN DI MENU PEMBAYARAN ===");
 
-
-                System.out.println("Apakah anda ingin menambahkan data lagi? (y/n)");
+                System.out.print("\nApakah anda ingin menambahkan data lagi? (y/n)");
                 String yesNo = sc.nextLine();
                 if (yesNo.equalsIgnoreCase("n")) {
                     break;
+                }
+            }
+        }
+    }
+
+    // function cari data transaksi via nama
+    static int cariDataByNama(String[][] arrayOrder, String nama) {
+        for (int i = 0; i < arrayOrder.length; i++) {
+            if (arrayOrder[i][1] != null) {
+                if (arrayOrder[i][1].equalsIgnoreCase(nama)) {
+                    return i;
+                }
+            }
+        }
+        return -1;
+    }
+
+    // function cari data transaksi via tanggal
+    static int cariDataByDate(String[][] arrayOrder, String date) {
+        for (int i = 0; i < arrayOrder.length; i++) {
+            if (arrayOrder[i][6] != null) {
+                if (arrayOrder[i][6].equalsIgnoreCase(date)) {
+                    return i;
+                }
+            }
+        }
+        return -1;
+    }
+
+    // function cari data transaksi via pesanan
+    static int cariDataByPesanan(String[][] arrayOrder, String pesanan) {
+        for (int i = 0; i < arrayOrder.length; i++) {
+            if (arrayOrder[i][2] != null) {
+                if (arrayOrder[i][2].equalsIgnoreCase(pesanan)) {
+                    return i;
+                }
+            }
+        }
+        return -1;
+    }
+
+    // cari data
+    static void findData() {
+        itemIndex = 0;
+        boolean subMenuFind = true;
+        String custName, date, orderName;
+
+        System.out.println("\n====== CARI DATA TRANSAKSI ======");
+        System.out.print("Cari melalui : \n1. Nama \n2. Tanggal \n3. Pesanan \n4. Kembali ke menu utama \nSelect option 1 - 4 : ");
+        menu = sc.nextInt();
+        sc.nextLine();
+
+        switch (menu) {
+            case 1:
+                System.out.print("Input nama yang ingin dicari : ");
+                custName = sc.nextLine();
+                itemIndex = cariDataByNama(arrayOrder, custName);
+                break;
+            case 2:
+                System.out.print("Input tanggal yang ingin dicari : ");
+                date = sc.nextLine();
+                itemIndex = cariDataByDate(arrayOrder, date);
+                break;
+            case 3:
+                System.out.print("Input nama pesanan yang ingin dicari : ");
+                orderName = sc.nextLine();
+                itemIndex = cariDataByPesanan(arrayOrder, orderName);
+                break;
+            case 4:
+                subMenuFind = false;
+                break;
+            default:
+                System.out.println("\t\tInvalid option! select option correctly");
+                break;
+        }
+
+        if (itemIndex == -1) {
+            System.out.println("\t\tData tidak ditemukan");
+        } else {
+            while (subMenuFind) {
+                System.out.println("Data ditemukan! Ini data yang kamu cari");
+                System.out.println(
+                        "| No | Code | Customer Name | Order              | Amount | Price      | Shipping Cost | Date       | Status      | Total      |");
+                               System.out.printf("| %-2d | %-4s | %-13s | %-18s | %-6s | %-10s | %-13s | %-10s | %-11s | %-10s |\n",
+                        (itemIndex + 1), arrayOrder[itemIndex][0], arrayOrder[itemIndex][1], arrayOrder[itemIndex][2],
+                        arrayOrder[itemIndex][3], arrayOrder[itemIndex][4], arrayOrder[itemIndex][5],
+                        arrayOrder[itemIndex][6], arrayOrder[itemIndex][7], arrayOrder[itemIndex][8]);
+                if (arrayOrder[itemIndex][7].equalsIgnoreCase("belum lunas")) {
+                    System.out.print("\nOPTION \n1. Bayar tagihan \n2. Kembali ke menu utama\n");
+                    System.out.print("Select option 1 - 2 : ");
+                    menu = sc.nextInt();
+                    sc.nextLine();
+
+                    switch(menu) {
+                        case 1:
+                            // bayar();
+                            break;
+                        case 2:
+                            subMenuFind = false;
+                            break;
+                        default:
+                            System.out.println("\t\tInvalid option! select option correctly");
+                            break;
+                    }
+                } else {
+                    System.out.print("\nOPTION \n1. Kembali ke menu utama\n");
+                    System.out.print("Select option : ");
+                    menu = sc.nextInt();
+                    sc.nextLine();
+
+                    switch (menu) {
+                        case 1:
+                            subMenuFind = false;
+                            break;
+                        default:
+                            System.out.println("\t\tInvalid option! select option correctly");
+                            break;
+                    }
                 }
             }
         }
@@ -198,8 +317,6 @@ public class Main {
             }
         }
     }
-
-    
 
     public static void main(String[] args) {
         setFrameOrder();
@@ -231,9 +348,11 @@ public class Main {
                                     break;
 
                                 case 2:
+                                    // bayar();
                                     break;
 
                                 case 3:
+                                    findData();
                                     break;
 
                                 case 4:
