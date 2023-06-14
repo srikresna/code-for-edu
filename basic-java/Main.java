@@ -10,7 +10,7 @@ public class Main {
     static String[] userMain = { "admin", "admin" };
     static String[] getUser = new String[2];
     static String[][] dataOrder = {
-            { "A1", "sunarmi", "nasi kotak premium", "30", "30000", "10000", "12-12-2012", "lunas", "910000" },
+            { "A1", "sunarmi", "nasi kotak premium", "30", "30000", "10000", "12-12-2012", "belum lunas", "910000" },
             { "A2", "sutejo", "nasi kotak klasik", "30", "30000", "10000", "12-12-2013", "lunas", "910000" },
             { "A3", "narmi", "nasi kotak biasa", "30", "30000", "10000", "12-12-2014", "lunas", "910000" },
     };
@@ -20,6 +20,8 @@ public class Main {
             { "nasi kotak klasik", "40000" },
             { "nasi kotak biasa", "20000" },
             { "nasi kotak murah", "10000" },
+            {"paket nasi kebuli", "35000"},
+            {"paket ulang tahun", "25000"}
     };
 
     static String[][] shippingCostTable = {
@@ -62,6 +64,8 @@ public class Main {
 
     // print data transaction
     static void detailTransactions() {
+        boolean detailTransactionsProcess = true;
+        while (detailTransactionsProcess) {
         System.out
                 .println(
                         "\n============================================================ DETAIL ============================================================");
@@ -92,7 +96,22 @@ public class Main {
 
         System.out.println(
                 "\n======================================= SEGERA HIMBAU CUSTOMER UNTUK MELUNASI PESANANNYA =======================================");
+        
+        System.out.println("OPTION \n1. Kembali ke menu utama");
+        System.out.print("Input option : ");
+        int menu = sc.nextInt();
+        sc.nextLine();
+
+        switch (menu) {
+        case 1:
+            detailTransactionsProcess = false;
+            break;
+        default:
+            System.out.println("Invalid option!");
+            break;
+        }
     }
+}
 
     // function input new customer
     static void inputNewCustomer() {
@@ -121,6 +140,10 @@ public class Main {
                     arrayOrder[i][4] = "20000";
                 } else if (arrayOrder[i][2].equalsIgnoreCase("nasi kotak murah")) {
                     arrayOrder[i][4] = "10000";
+                } else if (arrayOrder[i][2].equalsIgnoreCase("paket nasi kebuli")) {
+                    arrayOrder[i][4] = "35000";
+                } else if (arrayOrder[i][2].equalsIgnoreCase("paket ulang tahun")) {
+                    arrayOrder[i][4] = "25000";
                 } else {
                     arrayOrder[i][4] = "0";
                 }
@@ -258,14 +281,14 @@ public class Main {
                         arrayOrder[itemIndex][3], arrayOrder[itemIndex][4], arrayOrder[itemIndex][5],
                         arrayOrder[itemIndex][6], arrayOrder[itemIndex][7], arrayOrder[itemIndex][8]);
                 if (arrayOrder[itemIndex][7].equalsIgnoreCase("belum lunas")) {
-                    System.out.print("\nOPTION \n1. Bayar tagihan \n2. Kembali ke menu utama\n");
+                    System.out.print("\nOPTION \n1. Selesaikan pembayaran \n2. Kembali ke menu utama\n");
                     System.out.print("Select option 1 - 2 : ");
                     menu = sc.nextInt();
                     sc.nextLine();
 
                     switch(menu) {
                         case 1:
-                            // bayar();
+                            bayar(itemIndex);
                             break;
                         case 2:
                             subMenuFind = false;
@@ -291,6 +314,69 @@ public class Main {
                 }
             }
         }
+    }
+
+    // function bayar
+    static void bayar(int index) {
+        System.out.println("\n========== PEMBAYARAN ==========");
+        System.out.println("Total tagihan pelanggan " + arrayOrder[index][1] + " sebesar Rp. " + arrayOrder[index][8]);
+        System.out.println("================================");
+        System.out.print("Masukkan nominal pembayaran : ");
+        int bayar = sc.nextInt();
+        sc.nextLine();
+        System.out.println(".\n..\n...\n....\n.....");
+        if (bayar == Integer.parseInt(arrayOrder[index][8])) {
+            System.out.println("Pembayaran berhasil dilakukan! Uang pembayaran pas tidak ada kembalian");
+            arrayOrder[index][7] = "lunas";
+        } else if (bayar > Integer.parseInt(arrayOrder[index][8])) {
+            int kembalian = bayar - Integer.parseInt(arrayOrder[index][8]);
+            System.out.println("Pembayaran berhasil dilakukan!");
+            System.out.println("Uang kembalian sebesar Rp. " + kembalian);
+            arrayOrder[index][7] = "lunas";
+        } else {
+            System.out.println("Uang kurang, silahkan bayar sesuai dengan total tagihan");
+        }
+    }
+
+    // function bayar
+    static void statusPembayaran() {
+        System.out.println(
+                "\n======================================== DATA STATUS PEMBAYARAN (TERJEDA / BELUM LUNAS) ======================================");
+        System.out.println("| No | Code | Customer Name | Order              | Amount | Price      | Shipping Cost | Date       | Status      | Total      |");
+        for (int i = 0; i < arrayOrder.length;i++) {
+            if (arrayOrder[i][7] != null) {
+                if (arrayOrder[i][7].equalsIgnoreCase("belum lunas")) {
+                    System.out.printf("| %-2d | %-4s | %-13s | %-18s | %-6s | %-10s | %-13s | %-10s | %-11s | %-10s |\n",
+                            (i + 1), arrayOrder[i][0], arrayOrder[i][1], arrayOrder[i][2],
+                            arrayOrder[i][3], arrayOrder[i][4], arrayOrder[i][5],
+                            arrayOrder[i][6], arrayOrder[i][7], arrayOrder[i][8]);
+                }
+            }
+        }
+        System.out.print("\nOPTION \n1. Selesaikan pembayaran \n2. Kembali ke menu utama\n");
+        System.out.print("Select option 1 - 2 : ");
+        menu = sc.nextInt();
+        sc.nextLine();
+
+        switch (menu) {
+            case 1:
+                System.out.print("Masukkan nama customer : ");
+                String nama = sc.nextLine();
+                int index = cariDataByNama(arrayOrder, nama);
+                if (index != -1) {
+                    bayar(index);
+                } else {
+                    System.out.println("\t\tData tidak ditemukan");
+                }
+                break;
+            case 2:
+                mainProcess = false;
+                break;
+            default:
+                System.out.println("\t\tInvalid option! select option correctly");
+                break;
+        }
+
     }
 
     // detail transaksi
@@ -338,7 +424,7 @@ public class Main {
                         while (menuProcess) {
                             System.out.println(
                                     "\nMENU \n1. Input Pesanan \n2. Pembayaran \n3. Cari Data \n4. Detail Transaksi \n5. Exit Program");
-                            System.out.print("Choose menu 1 - 4 : ");
+                            System.out.print("Choose menu 1 - 5 : ");
                             menu = sc.nextInt();
                             sc.nextLine();
 
@@ -348,7 +434,7 @@ public class Main {
                                     break;
 
                                 case 2:
-                                    // bayar();
+                                    statusPembayaran();
                                     break;
 
                                 case 3:
