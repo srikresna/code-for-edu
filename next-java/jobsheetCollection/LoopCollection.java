@@ -22,15 +22,18 @@ public class LoopCollection {
 
         fruits.push("Melon");
         fruits.push("Durian");
+        
         System.out.println("");
         for (Iterator<String> it = fruits.iterator(); it.hasNext();) {
             String fruit = it.next();
             System.out.printf("%s ", fruit);
         }
+
         System.out.println("");
         fruits.stream().forEach((fruit) -> {
             System.out.printf("%s ", fruit);
         });
+
         System.out.println("");
         for (int i = 0; i < fruits.size(); i++) {
             System.out.printf("%s ", fruits.get(i));
