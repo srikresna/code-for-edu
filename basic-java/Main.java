@@ -15,7 +15,7 @@ public class Main {
             { "A3", "narmi", "nasi kotak biasa", "30", "30000", "10000", "12-12-2014", "lunas", "910000" },
     };
 
-    static String[][] foodMenu = {
+    static String[][] menuMakanan = {
             { "nasi kotak premium", "30000" },
             { "nasi kotak klasik", "40000" },
             { "nasi kotak biasa", "20000" },
@@ -24,7 +24,7 @@ public class Main {
             {"paket ulang tahun", "25000"}
     };
 
-    static String[][] shippingCostTable = {
+    static String[][] tabelOngkir = {
             { "0 - 1 km", "10000" },
             { "1 - 2 km", "20000" },
             { "2 - 3 km", "30000" },
@@ -38,7 +38,7 @@ public class Main {
     }
 
     // assign data to arrayOrder
-    static void setFrameOrder() {
+    static void setArrayOrder() {
         for (int i = 0; i < dataOrder.length; i++) {
             arrayOrder[i][0] = dataOrder[i][0];
             arrayOrder[i][1] = dataOrder[i][1];
@@ -53,7 +53,7 @@ public class Main {
     }
 
     // login function
-    static void loginPage() {
+    static void halamanLogin() {
         System.out.println("\n===== Login =====");
         System.out.print("Input username : ");
         getUser[0] = sc.nextLine();
@@ -114,11 +114,11 @@ public class Main {
 }
 
     // function input new customer
-    static void inputNewCustomer() {
+    static void masukanCustomerBaru() {
         // print menu
         System.out.println("\n===== MENU CATHERING =====\t\t\t\t");
-        for (int i = 0; i < foodMenu.length; i++) {
-            System.out.printf("%d. %s - Rp.%s\n", (i + 1), foodMenu[i][0], foodMenu[i][1]);
+        for (int i = 0; i < menuMakanan.length; i++) {
+            System.out.printf("%d. %s - Rp.%s\n", (i + 1), menuMakanan[i][0], menuMakanan[i][1]);
         }
 
         for (int i = 0; i < arrayOrder.length; i++) {
@@ -149,8 +149,8 @@ public class Main {
                 }
 
                 System.out.println("\n===== ONGKOS KIRIM =====");
-                for (int j = 0; j < shippingCostTable.length; j++) {
-                    System.out.printf("%d. %s - Rp.%s\n", (j + 1), shippingCostTable[j][0], shippingCostTable[j][1]);
+                for (int j = 0; j < tabelOngkir.length; j++) {
+                    System.out.printf("%d. %s - Rp.%s\n", (j + 1), tabelOngkir[j][0], tabelOngkir[j][1]);
                 }
 
                 System.out.print("Input shipping range : ");
@@ -235,7 +235,7 @@ public class Main {
     }
 
     // cari data
-    static void findData() {
+    static void cariData() {
         itemIndex = 0;
         boolean subMenuFind = true;
         String custName, date, orderName;
@@ -380,7 +380,7 @@ public class Main {
     }
 
     // detail transaksi
-    static void inputTransactions() {
+    static void masukanTransaksi() {
         inputProcess = true;
         while (inputProcess) {
             System.out.println(
@@ -391,7 +391,7 @@ public class Main {
 
             switch (menu) {
                 case 1:
-                    inputNewCustomer();
+                    masukanCustomerBaru();
                     break;
                 case 2:
                     inputProcess = false;
@@ -405,7 +405,7 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        setFrameOrder();
+        setArrayOrder();
         String line = "===========================================";
         System.out.printf("%s\n\tWANGGSAFF CATHERING \n%s", line, line);
         mainProcess = true;
@@ -418,7 +418,7 @@ public class Main {
             switch (menu) {
                 case 1:
                     menuProcess = true;
-                    loginPage();
+                    halamanLogin();
                     if (validationUser) {
                         System.out.println("\nWELCOME ADMIN!!");
                         while (menuProcess) {
@@ -430,7 +430,7 @@ public class Main {
 
                             switch (menu) {
                                 case 1:
-                                    inputTransactions();
+                                    masukanTransaksi();
                                     break;
 
                                 case 2:
@@ -438,7 +438,7 @@ public class Main {
                                     break;
 
                                 case 3:
-                                    findData();
+                                    cariData();
                                     break;
 
                                 case 4:
