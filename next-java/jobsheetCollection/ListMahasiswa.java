@@ -32,6 +32,34 @@ public class ListMahasiswa {
         return -1;
     }
 
+    int binarySearch(String nim) {
+        Mahasiswa key = new Mahasiswa(nim, "", "");
+        return Collections.binarySearch(mahasiswas, key, new Comparator<Mahasiswa>() {
+            @Override
+            public int compare(Mahasiswa m1, Mahasiswa m2) {
+                return m1.nim.compareTo(m2.nim);
+            }
+        });
+    }
+
+    public void sortingAscending() {
+        Collections.sort(mahasiswas, new Comparator<Mahasiswa>() {
+            @Override
+            public int compare(Mahasiswa m1, Mahasiswa m2) {
+                return m1.nim.compareTo(m2.nim);
+            }
+        });
+    }
+
+    public void sortingDescending() {
+        Collections.sort(mahasiswas, new Comparator<Mahasiswa>() {
+            @Override
+            public int compare(Mahasiswa m1, Mahasiswa m2) {
+                return m2.nim.compareTo(m1.nim);
+            }
+        });
+    }
+
     public static void main(String[] args) {
         ListMahasiswa lm = new ListMahasiswa();
         Mahasiswa m = new Mahasiswa("201234", "Noureen", "021xx1");
@@ -42,7 +70,7 @@ public class ListMahasiswa {
 
         lm.tampil();
 
-        lm.update(lm.linearSearch("201235"), new Mahasiswa("201235", "Akhleema Lela", "021xx2"));
+        lm.update(lm.binarySearch("201235"), new Mahasiswa("201235", "Akhleema Lela", "021xx2"));
         System.out.println("");
         lm.tampil();
     }
