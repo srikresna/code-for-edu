@@ -20,4 +20,5 @@ public class Mahasiswa {
     public String getTelf() {
         return telf;
     }
+
 }
