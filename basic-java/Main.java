@@ -54,12 +54,27 @@ public class Main {
 
     // login function
     static void halamanLogin() {
-        System.out.println("\n===== Login =====");
-        System.out.print("Input username : ");
-        getUser[0] = sc.nextLine();
-        System.out.print("Input password : ");
-        getUser[1] = sc.nextLine();
-        validationUser = validationUser(getUser[0], getUser[1]);
+        // ketika login gagal 3x maka program akan berhenti
+        int count = 0;
+        boolean loginProcess = true;
+        while (loginProcess) {
+            System.out.println("\n===== Login =====");
+            System.out.print("Input username : ");
+            getUser[0] = sc.nextLine();
+            System.out.print("Input password : ");
+            getUser[1] = sc.nextLine();
+            validationUser = validationUser(getUser[0], getUser[1]);
+            if (validationUser) {
+                loginProcess = false;
+            } else {
+                count++;
+                if (count == 3) {
+                    System.out.println("Anda telah salah login 3x, program berhenti!");
+                    System.exit(0);
+                }
+                System.out.println("Username atau password salah!");
+            }
+        }
     }
 
     // print data transaction
