@@ -1,5 +1,6 @@
 package oop_java.week2;
 
+
 public class Mahasiswa {
     public int nim;
     public String nama;
