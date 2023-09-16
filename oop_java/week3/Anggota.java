@@ -1,41 +1,48 @@
 package oop_java.week3;
 
 public class Anggota {
+    private String nomorKTP;
     private String nama;
-    private String alamat;
-    private float simpanan;
+    private int limitPinjaman;
+    private int jumlahPinjaman;
 
-    Anggota(String nama, String alamat) {
+    Anggota(String nomorKTP, String nama, int limitPinjaman) {
+        this.nomorKTP = nomorKTP;
         this.nama = nama;
-        this.alamat = alamat;
-        this.simpanan = 0;
-    }
-
-    public void setNama(String nama) {
-        this.nama = nama;
-    }
-
-    public void setAlamat(String alamat) {
-        this.alamat = alamat;
+        this.limitPinjaman = limitPinjaman;
     }
 
     public String getNama() {
-        return this.nama;
+        return nama;
     }
 
-    public String getAlamat() {
-        return this.alamat;
+    public int getLimitPinjaman() {
+        return limitPinjaman;
     }
 
-    public float getSimpanan() {
-        return this.simpanan;
+    public int getJumlahPinjaman() {
+        return jumlahPinjaman;
     }
 
-    public void setor(float uang) {
-        this.simpanan += uang;
+    public void pinjam(int pinjam) {
+        if (pinjam > limitPinjaman) {
+            System.out.println("Maaf, jumlah pinjaman melebihi limit.");
+        } else {
+            jumlahPinjaman += pinjam;
+        }
     }
 
-    public void pinjam(float uang) {
-        this.simpanan -= uang;
+    // public void angsur(int angsur) {
+    //     jumlahPinjaman -= angsur;
+    // }
+
+    public void angsur(int angsur) {
+        if (angsur < (jumlahPinjaman * 0.1)) {
+            System.out.println("Maaf, angsuran harus 10% dari jumlah pinjaman");
+        } else {
+            jumlahPinjaman -= angsur;
+        }
     }
+
+    
 }
