@@ -16,6 +16,7 @@ echo "Hasil pembagian $a dan $b adalah $hasilBagi. <br>";
 echo "Hasil sisa bagi $a dan $b adalah $sisaBagi. <br>";
 echo "Hasil pangkat $a dan $b adalah $pangkat. <br>";
 
+echo "<br>";
 //tambahan
 
 $hasilSama = $a == $b;
@@ -32,6 +33,7 @@ echo "Hasil lebih kecil dari $a dan $b adalah $hasilLebihKecil. <br>";
 echo "Hasil lebih kecil sama dengan $a dan $b adalah $hasilLebihKecilSama. <br>";
 echo "Hasil lebih besar sama dengan $a dan $b adalah $hasilLebihBesarSama. <br>";
 
+echo "<br>";
 //tambahan
 
 $hasilAnd = $a && $b;
@@ -44,6 +46,7 @@ echo "Hasil OR $a dan $b adalah $hasilOr. <br>";
 echo "Hasil NOT $a adalah $hasilNotA. <br>";
 echo "Hasil NOT $b adalah $hasilNotB. <br>";
 
+echo "<br>";
 //tambahan
 $a += $b;
 $a -= $b;
@@ -57,10 +60,15 @@ echo "Hasil *= $a dan $b adalah $a. <br>";
 echo "Hasil /= $a dan $b adalah $a. <br>";
 echo "Hasil %= $a dan $b adalah $a. <br>";
 
+echo "<br>";
 //tambahan
 $hasilIdentik = $a === $b;
 $hasilTidakIdentik = $a !== $b;
 
+echo "Hasil identik $a dan $b adalah $hasilIdentik. <br>";
+echo "Hasil tidak identik $a dan $b adalah $hasilTidakIdentik. <br>";
+
+echo "<br>";
 // soal cerita : Sebuah restoran memiliki 45 kursi di dalamnya.
 // Pada suatu malam, 28 ursi telah ditempati oleh penlanggan. Berapa persen kursi yang masih kosong di restoran tersebut?
 

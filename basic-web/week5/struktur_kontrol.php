@@ -12,6 +12,8 @@ if ($nilaiNumerik >= 90 && $nilaiNumerik <= 100) {
 }
 
 echo "<br>";
+
+echo "<br>";
 $jarakSaatIni = 0;
 $jarakTarget = 500;
 $peningkatanHarian = 30;
@@ -23,6 +25,8 @@ while ($jarakSaatIni < $jarakTarget) {
 }
 
 echo "Atlet tersebut memerlukan $hari hari untuk mencapai jarak 500 kilometer.";
+
+echo "<br>";
 
 echo "<br>";
 $jumlahLahan = 10;
@@ -37,6 +41,8 @@ for ($i = 1; $i <= $jumlahLahan; $i++) {
 echo "Jumlah buah yang akan dipanen adalah: $jumlahBuah";
 
 echo "<br>";
+
+echo "<br>";
 $skorUjian = [85, 92, 78, 96, 88];
 $totalSkor = 0;
 
@@ -45,6 +51,8 @@ foreach ($skorUjian as $skor) {
 }
 
 echo "Total skor ujian adalah: $totalSkor";
+
+echo "<br>";
 
 echo "<br>";
 $nilaiSiswa = [85, 92, 58, 64, 90, 55, 88, 79, 70, 96];
@@ -56,6 +64,8 @@ foreach ($nilaiSiswa as $nilai) {
     }
     echo "Nilai: $nilai (Lulus) <br>";
 }
+
+echo "<br>";
 
 echo "<br>";
 // soal cerita 1
