@@ -17,6 +17,9 @@ GO
 -- Execute the written statement and compare the results that you got with the desired results shown in the file 62 - Lab Exercise 2 - Task 1 Result.txt.
 ---------------------------------------------------------------------
 
+SELECT DISTINCT custid
+FROM Sales.Orders
+WHERE YEAR(orderdate) = 2008 AND MONTH(orderdate) = 2;
 
 ---------------------------------------------------------------------
 -- Task 2
@@ -29,7 +32,9 @@ GO
 -- Execute the written statement and compare the results that you got with the recommended result shown in the file 63 - Lab Exercise 2 - Task 2 Result.txt.
 ---------------------------------------------------------------------
 
-
+SELECT SYSDATETIME() AS currentdate,
+DATEADD (MONTH, DATEDIFF(MONTH, 0, SYSDATETIME()), 0) AS firstofmonth,
+DATEADD (MONTH, DATEDIFF(MONTH, -1, SYSDATETIME()), -1) AS lastofmonth;
 
 ---------------------------------------------------------------------
 -- Task 3
@@ -39,6 +44,9 @@ GO
 -- Execute the written statement and compare the results that you got with the recommended result shown in the file 64 - Lab Exercise 2 - Task 3 Result.txt.
 ---------------------------------------------------------------------
 
+SELECT orderid, custid, orderdate
+FROM Sales.Orders
+WHERE DATEDIFF(DAY, DATEADD(MONTH, DATEDIFF(MONTH, 0, orderdate),0), orderdate) >= 25;
 
 
 
@@ -49,3 +57,10 @@ GO
 --
 -- Execute the written statement and compare the results that you got with the recommended result shown in the file 65 - Lab Exercise 2 - Task 4 Result.txt.
 ---------------------------------------------------------------------
+
+SELECT DISTINCT productid
+FROM Sales.Orders AS o
+JOIN Sales.OrderDetails AS od
+ON o.orderid = od.orderid
+WHERE YEAR(orderdate) = 2007 AND DATEPART(WEEK, orderdate) <= 10;
+

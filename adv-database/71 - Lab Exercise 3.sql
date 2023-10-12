@@ -18,6 +18,9 @@ GO
 -- Execute the written statement and compare the results that you got with the recommended result shown in the file 72 - Lab Exercise 3 - Task 1 Result.txt. 
 ---------------------------------------------------------------------
 
+SELECT contactname + ' (city: ' + city + ')' AS contactname_city
+FROM Sales.Customers;
+
 
 ---------------------------------------------------------------------
 -- Task 2
@@ -31,12 +34,18 @@ GO
 -- Execute the written statement and compare the results that you got with the recommended result shown in the file 73 - Lab Exercise 3 - Task 2 Result.txt.
 ---------------------------------------------------------------------
 
+SELECT contactname + ' (city: ' + city + ', region: ' + ISNULL(region, '') + ')' AS contactname_city_region
+FROM Sales.Customers;
 
 ---------------------------------------------------------------------
 -- Task 3
 -- 
--- Write a SELECT statement to retrieve the contactname and contacttitle columns from the Sales.Customers table. Return only rows where the first character in the contact name is ‘A’ through ‘G’.
+-- Write a SELECT statement to retrieve the contactname and contacttitle columns from the Sales.Customers table. Return only rows where the first character in the contact name is ï¿½Aï¿½ through ï¿½Gï¿½.
 --
 -- Execute the written statement and compare the results that you got with the recommended result shown in the file 74 - Lab Exercise 3 - Task 3 Result.txt. Notice the number of rows returned.
 ---------------------------------------------------------------------
+
+SELECT contactname, contacttitle
+FROM Sales.Customers
+WHERE contactname LIKE 'A%' OR contactname LIKE 'B%' OR contactname LIKE 'C%' OR contactname LIKE 'D%' OR contactname LIKE 'E%' OR contactname LIKE 'F%' OR contactname LIKE 'G%';
 

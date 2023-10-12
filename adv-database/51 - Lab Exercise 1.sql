@@ -25,9 +25,19 @@ GO
 -- 
 -- Execute the written statement and compare the results that you got with the desired results shown in the file 52 - Lab Exercise 1 - Task 1 Result.txt. Your results will be different because of the current date and time value.
 --
--- Can you use the alias currentdatetime as the source in the second column calculation (currentdate)? Please explain.
+-- Can you use the alias currentdatetime as the source in the second column calculation (currentdate)? Please explain. 
+-- ANSWER : No, because the alias is not defined yet, so it cannot be used in the same select statement. 
 ---------------------------------------------------------------------
 
+
+SELECT SYSDATETIME() AS currentdatetime,
+	   CONVERT(DATE, SYSDATETIME()) AS currentdate,
+	   CONVERT(TIME, SYSDATETIME()) AS currenttime,
+	   YEAR(SYSDATETIME()) AS currentyear,
+	   MONTH(SYSDATETIME()) AS currentmonth,
+	   DAY(SYSDATETIME()) AS currentday,
+	   DATEPART(WEEK, SYSDATETIME()) AS currentweeknumber,
+	   DATENAME(MONTH, SYSDATETIME()) AS currentmonthname;
 
 
 ---------------------------------------------------------------------
@@ -36,6 +46,9 @@ GO
 -- Write December 11, 2011, as a column with a data type of date. Use the different possibilities inside the T-SQL language (cast, convert, specific function, etc.) and use the alias somedate.
 ---------------------------------------------------------------------
 
+SELECT CAST('2011-12-11' AS DATE) AS somedate,
+	   CONVERT(DATE, '2011-12-11') AS somedate2,
+	   DATEFROMPARTS(2011, 12, 11) AS somedate3;
 
 ---------------------------------------------------------------------
 -- Task 3
@@ -49,7 +62,10 @@ GO
 -- Execute the written statement and compare the results that you got with the desired results shown in the file 53 - Lab Exercise 1 - Task 3 Result.txt. Some results will be different because of the current date and time value.
 ---------------------------------------------------------------------
 
-
+SELECT DATEADD(MONTH, 3, SYSDATETIME()) AS threemonths,
+	   DATEDIFF(DAY, SYSDATETIME(), DATEADD(MONTH, 3, SYSDATETIME())) AS diffdays,
+	   DATEDIFF(WEEK, '1992-04-04', '2011-09-16') AS diffweeks,
+	   DATEADD(DAY, 1 - DAY(SYSDATETIME()), SYSDATETIME()) AS firstday;
 ---------------------------------------------------------------------
 -- Task 4
 -- 
@@ -71,6 +87,8 @@ SET NOCOUNT ON;
 IF OBJECT_ID('Sales.Somedates') IS NOT NULL 
 	DROP TABLE Sales.Somedates;
 
+CREATE SCHEMA Sales;
+
 CREATE TABLE Sales.Somedates (
 	isitdate varchar(9)
 );
@@ -87,7 +105,11 @@ INSERT INTO Sales.Somedates (isitdate) VALUES
 
 SET NOCOUNT OFF;
 
-SELECT isitdate
+SELECT isitdate,
+CASE
+	WHEN ISDATE(isitdate) = 1 THEN CONVERT(DATE, isitdate)
+	ELSE NULL
+END AS converteddate
 FROM Sales.Somedates;
 
 
