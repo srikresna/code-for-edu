@@ -1,4 +1,4 @@
-package oop_java.week7;
+package oop_java.week6;
 
 public class LibraryMember {
     String name, member_number;
