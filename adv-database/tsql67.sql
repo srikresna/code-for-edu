@@ -350,3 +350,249 @@ p.productname,
 p.totalsalesamount
 FROM dbo.fnGetTop3ProductsForCustomer(1) AS p;
 
+
+-- JOBHSEET 7
+
+/*
+Skenario :
+Bagian penjualan ingin menentukan pesanan berdasarkan nilai masing-masing pelanggan. Untuk 
+itu diperlukan laporkan menggunakan fungsi RANK (termasuk kolom hasil perhitungan yang 
+manambahkan kolom hasil perhitungan untuk menampilkan nomor baris dengan klausa 
+SELECT).
+
+soal 1 
+Tulislah pernyataan SELECT untuk mengambil kolom orderid, orderdate, dan val serta 
+kolom hasil perhitungan bernama rowno dari view Sales.OrderValues! Gunakan fungsi 
+ROW_NUMBER untuk mengembalikan rowno, urutkan nomor baris berdasarkan kolom 
+orderdate!
+*/
+
+SELECT
+	orderid, orderdate, val,
+	ROW_NUMBER() OVER (ORDER BY orderdate) AS rowno
+FROM Sales.OrderValues;
+
+/*
+soal 2
+Salin T-SQL pada soal no 1. Kemudian modifikasi dengan memasukkan kolom tambahan 
+bernama rankno. Untuk membuat rankno gunakan fungsi RANK dengan urutan peringkat 
+berdasarkan kolom orderdate!
+*/
+
+SELECT
+	orderid, orderdate, val,
+	ROW_NUMBER() OVER (ORDER BY orderdate) AS rowno,
+	RANK() OVER (ORDER BY orderdate) AS rankno
+FROM Sales.OrderValues;
+
+/*
+soal 3
+Apakah perbedaan antara fungsi RANK dan fungsi ROW_NUMBER?
+*/
+
+/*
+Fungsi RANK mengembalikan peringkat dari nilai yang sama, sedangkan fungsi ROW_NUMBER
+tidak mengembalikan peringkat dari nilai yang sama.
+*/
+
+/*
+soal 4
+ Tuliskan pernyataan SELECT untuk mengambil kolom orderid, orderdate, custid, dan val 
+serta hitung kolom bernama orderrankno dari view Sales.OrderValues. Kolom orderrankno 
+harus menampilkan rangking per pelanggan secara independen, berdasarkan pemesanan val 
+dalam urutan menurun!
+*/
+
+SELECT
+	orderid, orderdate, custid, val,
+	RANK() OVER (PARTITION BY custid ORDER BY val DESC) AS orderrankno
+FROM Sales.OrderValues;
+	
+/*
+soal 5
+ Tuliskan pernyataan SELECT untuk mengambil kolom custid dan val dari view 
+Sales.OrderValues. Tambahkan dua kolom berikut:
+1) orderyear sebagai tahun dari kolom orderdate
+2) orderrankno sebagai nomor urut, dipartisi berdasarkan pelanggan dan tahun pesanan, 
+dan diurutkan berdasarkan nilai pesanan dalam urutan menurun
+*/
+
+SELECT
+	custid, val,
+	YEAR(orderdate) AS orderyear,
+	RANK() OVER (PARTITION BY custid, YEAR(orderdate) ORDER BY val DESC) AS orderrankno
+FROM Sales.OrderValues;
+
+/*
+soal 6
+Salin query jawaban soal nomor 6 dan modifikasi untuk memfilter hanya pesanan 
+dengan dua peringkat paling awal berdasarkan kolom orderrankno!
+*/
+
+SELECT
+    custid,
+    val,
+    orderyear,
+    orderrankno
+FROM (
+    SELECT
+        custid,
+        val,
+        YEAR(orderdate) AS orderyear,
+        RANK() OVER (PARTITION BY custid, YEAR(orderdate) ORDER BY val DESC) AS orderrankno
+    FROM Sales.OrderValues
+) AS Subquery
+WHERE orderrankno <= 2;
+
+
+/*
+Skenario :
+Laporan lainnya diperlukan untuk menganalisis perbedaan antara dua baris secara 
+berturut-turut. Hal ini akan mempermudah business user untuk menganalisa pertumbuhan dan tren
+*/
+
+/*
+soal 7
+Buatlah (common table expression) CTE dengan nama OrderRows berdasarkan query yang 
+mengambil kolom orderid, orderdate, and val dari view Sales.OrderValues. Tambahkan kolom 
+hasil perhitungan dengan nama rowno menggunakan fungsi ROW_NUMBER yang diurutkan 
+berdasarkan kolom orderdate dan orderid!
+*/
+
+WITH OrderRows AS
+(
+	SELECT
+		orderid, orderdate, val,
+		ROW_NUMBER() OVER (ORDER BY orderdate, orderid) AS rowno
+	FROM Sales.OrderValues
+)
+SELECT
+	orderid, orderdate, val, rowno
+FROM OrderRows;
+
+/*
+soal 8
+Tuliskan pernyataan SELECT terhadap CTE dan gunakan LEFT JOIN dengan CTE yang sama 
+untuk mengambil baris saat ini (current row) dan baris sebelumnya (previous row) berdasarkan 
+kolom rowno. Kembalikan kolom orderid, orderdate, and val untuk baris saat ini dan kolom val 
+untuk baris sebelumnya sebagai prevval. Tambahkan kolom hasil perhitungan dengan nama 
+diffprev yang menunjukkan perbedaan antara val saat ini dengan sebelumnya!
+*/
+
+WITH OrderRows AS
+(
+	SELECT
+		orderid, orderdate, val,
+		ROW_NUMBER() OVER (ORDER BY orderdate, orderid) AS rowno
+	FROM Sales.OrderValues
+)
+SELECT
+	o.orderid, o.orderdate, o.val, o.val - p.val AS diffprev
+FROM OrderRows AS o
+LEFT JOIN OrderRows AS p ON o.rowno = p.rowno + 1;
+
+
+/*
+soal 9
+Tuliskan pernyataan SELECT menggunakan fungsi LAG untuk mendapat hasil yang sama 
+dengan query pada soal no.2! Query tidak yang dibuat pada soal ini tidak menggunakan CTE
+*/
+
+SELECT
+	orderid, orderdate, val,
+	ROW_NUMBER() OVER (ORDER BY orderdate, orderid) AS rowno,
+	LAG(val) OVER (ORDER BY orderdate, orderid) AS prevval
+FROM Sales.OrderValues;
+
+/*
+soal 10
+Buatlah sebuah CTE bernama SalesMonth2007 yang membuat dua kolom yaitu, 
+monthno (jumlah bulan dari kolom orderdate) dan val (agregat dari kolom val)! Kemudian filter 
+hasilnya hanya untuk tahun pesanan 2007 dan dikelompokkan berdasarkan monthno!
+*/
+
+WITH SalesMonth2007 AS
+(
+	SELECT
+		MONTH(orderdate) AS monthno, SUM(val) AS val
+	FROM Sales.OrderValues
+	WHERE YEAR(orderdate) = 2007
+	GROUP BY MONTH(orderdate)
+)
+SELECT
+	monthno, val
+FROM SalesMonth2007;
+
+/*
+soal 11
+Tuliskan pernyataan SELECT yang akan mengambil kolom montohno dan val dari CTE 
+dan tambahkan 3 kolom untuk ditampilkan, yaitu :
+1) avglast3months (jumlah penjualan rata-rata tiga bulan terakhir)
+2) diffjanuary (perbedaan antara val saat ini dengan val pada bulan januari, gunakan fungsi 
+FIRST_VALUE)
+3) nextval (nilai dari kolom val pada bulan selanjutnya)
+*/
+
+
+
+/*
+Skenario :
+Untuk lebih memahami nilai penjualan kumulatif pelanggan melalui waktu dan untuk 
+menyediakan analis penjualan dengan analisis selama setahun ini diperlukan pernyataan 
+SELECT yang berbeda menggunakan fungsi agregasi window
+*/
+
+/*
+soal 12
+ Tuliskan pernyataan SELECT untuk mengambil kolom custid, orderid, orderdate, dan 
+val dari view Sales.OrderValues. Tambahkan kolom bernama percoftotalcust yang berisi 
+persentase nilai masing-masing jumlah pesanan penjualan dibandingkan dengan jumlah 
+penjualan untuk pelanggan tersebut. Urutkan val dari yang terbesar
+*/
+
+SELECT
+	custid, orderid, orderdate, val,
+	CAST(val * 100. / SUM(val) OVER (PARTITION BY custid) AS DECIMAL(5, 2)) AS percoftotalcust
+FROM Sales.OrderValues
+ORDER BY val DESC;
+
+/*
+soal 13
+Salin pernyataan SELECT sebelumnya dan modifikasi dengan menambahkan kolom 
+yang baru dihitung bernama runval! Kolom ini harus berisi total penjualan yang sedang terjadi 
+untuk setiap pelanggan berdasarkan tanggal pemesanan, menggunakan orderid sebagai 
+tiebreaker.
+*/
+
+SELECT
+	custid, orderid, orderdate, val,
+	CAST(val * 100. / SUM(val) OVER (PARTITION BY custid) AS DECIMAL(5, 2)) AS percoftotalcust,
+	SUM(val) OVER (PARTITION BY custid ORDER BY orderdate, orderid) AS runval
+FROM Sales.OrderValues
+ORDER BY val DESC;
+
+/*
+soal 14
+Salin CTE SalesMonth2007 dalam percobaan 2. Tuliskan pernyataan SELECT untuk 
+mengambil kolom monthno dan val. Tambahkan dua kolom yang dihitung:
+1) avglast3months. Kolom ini harus berisi jumlah penjualan rata-rata untuk tiga bulan 
+terakhir sebelum bulan saat ini menggunakan fungsi window agregat. Asumsikan bahwa 
+tidak ada missing months.
+2) ytdval Kolom ini harus berisi nilai penjualan kumulatif sampai dengan bulan saat ini
+*/
+
+WITH SalesMonth2007 AS
+(
+	SELECT
+		MONTH(orderdate) AS monthno, SUM(val) AS val
+	FROM Sales.OrderValues
+	WHERE YEAR(orderdate) = 2007
+	GROUP BY MONTH(orderdate)
+)
+SELECT
+	monthno, val,
+	AVG(val) OVER (ORDER BY monthno ROWS BETWEEN 3 PRECEDING AND 1 PRECEDING) AS
+	avglast3months,
+	SUM(val) OVER (ORDER BY monthno ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT
+	ROW) AS ytdval
+FROM SalesMonth2007;
