@@ -1,4 +1,4 @@
-use TSQL20;
+use TSQL;
 --1
 /*Tulislah	 sebuah	 query	 SELECT	 untuk	 menampilkan kolom	 
 productid,	 productname, supplierid,	unitprice dan	kolom	discontinued 
@@ -351,7 +351,7 @@ p.totalsalesamount
 FROM dbo.fnGetTop3ProductsForCustomer(1) AS p;
 
 
--- JOBHSEET 7
+-- JOBHSEET 6
 
 /*
 Skenario :
@@ -596,3 +596,270 @@ SELECT
 	SUM(val) OVER (ORDER BY monthno ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT
 	ROW) AS ytdval
 FROM SalesMonth2007;
+
+
+-- Jobsheet 8
+CREATE VIEW Sales.CustGroups
+AS
+	SELECT custid, CHOOSE(custid % 3 + 1, N'A', N'B', N'C') AS custgroup, country
+	FROM Sales.Customers;
+
+-- soal 1
+-- Dari view Sales.CustGroups yang sudah dibuat, buatlah sebuah query SELECT untuk 
+-- menampilkan kolom custid, custgroup, dan country. 
+
+SELECT custid, custgroup, country
+FROM Sales.CustGroups;
+
+/*
+soal 2
+ Modifikasilah kode T-SQL dari langkah no 3 di atas dengan menampilkan kolom country, 
+lalu dengan menggunakan operator PIVOT, tambahkan 3 kolom tambahan yang berisi banyaknya 
+customer dalam masing-masing grup (A, B, & C). MEnggunakan CTE, pastikan NULL menjadi 0
+*/
+
+WITH CustGroups AS
+(
+	SELECT custid, CHOOSE(custid % 3 + 1, N'A', N'B', N'C') AS custgroup, country
+	FROM Sales.CustGroups
+)
+SELECT country, ISNULL (A, 0) AS A, ISNULL (B, 0) AS B, ISNULL (C, 0) AS C
+FROM CustGroups
+PIVOT (COUNT(custid) FOR custgroup IN (A, B, C)) AS p;
+
+
+-- Berikut adalah query yang menambahkan 2 kolom ke dalam view Sales.CustGroups
+ALTER VIEW Sales.CustGroups AS
+SELECT
+	custid,
+	CHOOSE(custid % 3 + 1, N'A', N'B', N'C') AS custgroup,
+	country,
+	city,
+	contactname
+FROM Sales.Customers;
+
+/*
+soal 4
+Modifikasi statement soal 2 di atas dengan menambahkan 2 kolom baru ke dalam
+operator PIVOT, yaitu city dan contactname. Pastikan NULL menjadi 0.
+*/
+
+WITH CustGroups AS
+(
+	SELECT
+		custid,
+		CHOOSE(custid % 3 + 1, N'A', N'B', N'C') AS custgroup,
+		country,
+		city,
+		contactname
+	FROM Sales.CustGroups
+)
+SELECT country, city, contactname, ISNULL (A, 0) AS A, ISNULL (B, 0) AS B, ISNULL (C, 0) AS C
+FROM CustGroups
+PIVOT (COUNT(custid) FOR custgroup IN (A, B, C)) AS p;
+
+/*
+soal 5
+Buatlah sebuah CTE bernama PivotCustGroups yang mendapatkan kolom custid, 
+country, dan custgroup dari view Sales.CustGroups. Kemudian, buatlah sebuah query SELECT 
+terhadap CTE tersebut dan gunakan operator PIVOT, seperti halnya dalam query SELECT pada 
+Praktikum Bagian sebelumnya
+*/
+
+WITH PivotCustGroups AS
+(
+	SELECT custid, country, custgroup
+	FROM Sales.CustGroups
+)
+SELECT country, ISNULL (A, 0) AS A, ISNULL (B, 0) AS B, ISNULL (C, 0) AS C
+FROM PivotCustGroups
+PIVOT (COUNT(custid) FOR custgroup IN (A, B, C)) AS p;
+
+/*
+soal 6
+ Apakah hasilnya sama persis dengan hasil yang ada pada Praktikum Bagian 1? 
+Mengapa demikian? 
+*/
+
+/*
+Hasilnya sama persis. Karena CTE adalah sebuah query yang dianggap sebagai tabel sementara
+*/
+
+/*
+[Soal-7] Apakah keuntungan penggunaan CTE ketika membuat query yang menggunakan 
+operator PIVOT?
+*/
+
+/*
+Keuntungan penggunaan CTE ketika membuat query yang menggunakan operator PIVOT adalah
+karena CTE adalah sebuah query yang dianggap sebagai tabel sementara, sehingga dapat
+mempermudah dalam pembuatan query.
+*/
+
+/*
+soal 8
+Buatlah sebuah query SELECT yang menampilkan data total jumlah penjualan untuk 
+setiap kategori produk, untuk setiap customer.
+Untuk menjawab soal ini, ikuti langkah-langkah berikut: 
+1. Buatlah sebuah CTE bernama SalesByCategory untuk mendapatkan 3 kolom: 
+ kolom custid dari tabel Sales.Orders
+ kolom salesvalue hasil perhitungan antara kolom qty dan unitprice
+ kolom categoryname dari tabel Production.Categories
+Filter hasilnya agar hanya menampilkan order pada tahun 2008 saja. 
+2. Lakukan operasi JOIN terhadap tabel Sales.Orders, Sales.OrderDetails, 
+Production.Products, dan Production.Categories. 
+3. Buatlah sebuah query SELECT terhadap CTE tersebut yang menghasilkan data setiap 
+customer (custid) berupa baris dan nama setiap kategori produk sebagai kolomkolomnya, yang berisi data total jumlah penjualan untuk setiap kategori produk, untuk 
+setiap customer. 
+4. Kategori produk yang ditampilkan antara lain: Beverages, Condiments, Confections, 
+[Dairy Products], [Grain/Cereals], [Meat/Poultry], Produce, dan Seafood. 
+
+null tidak masalah
+*/
+
+WITH SalesByCategory AS
+(
+	SELECT
+		o.custid, SUM(d.qty * d.unitprice) AS salesvalue, c.categoryname
+	FROM Sales.Orders AS o
+	INNER JOIN Sales.OrderDetails AS d ON d.orderid = o.orderid
+	INNER JOIN Production.Products AS p ON p.productid = d.productid
+	INNER JOIN Production.Categories AS c ON c.categoryid = p.categoryid
+	WHERE YEAR(o.orderdate) = 2008
+	GROUP BY o.custid, c.categoryname
+)
+SELECT
+	custid, Beverages, Condiments, Confections, [Dairy Products], [Grain/Cereals], [Meat/Poultry], Produce, Seafood
+FROM SalesByCategory
+PIVOT (SUM(salesvalue) FOR categoryname IN (Beverages, Condiments, Confections, [Dairy Products], [Grain/Cereals], [Meat/Poultry], Produce, Seafood)) AS p;
+
+
+-- Berikut ini adalah query T-SQL untuk membuat view baru bernama Sales.PivotCustGroups
+
+CREATE VIEW Sales.PivotCustGroups AS
+WITH PivotCustGroups AS
+(
+	SELECT
+		custid,
+		country,
+		custgroup
+	FROM Sales.CustGroups
+)
+SELECT
+	country,
+	p.A,
+	p.B,
+	p.C
+FROM PivotCustGroups
+PIVOT (COUNT(custid) FOR custgroup IN (A, B, C)) AS p;
+
+/*
+soal 9
+Buatlah query SELECT yang menghasilkan kolom country, kolom A, kolom B, dan kolom 
+C dari view Sales.PivotCustGroups yang telah dibuat. 
+*/
+
+SELECT country, A, B, C
+FROM Sales.PivotCustGroups;
+
+/*
+soal 10
+Buatlah sebuah query SELECT terhadap view Sales.PivotCustGroups
+Penjelasan 
+1. Baris untuk setiap negara dan grup customer 
+2. Kolom untuk setiap negara 
+3. Terdapat 2 kolom tambahan, yakni custgroup dan numberofcustomers. 
+Kolom custgroup adalah nama kolom grup customer A, B, atau C, dalam bentuk karakter 
+string. Sedangkan kolom numberofcustomers menampilkan banyaknya customer. 
+
+konsep custgroup menerapkan unpivot, dari A B C menjadi kolom A B C
+*/
+
+SELECT
+	country, custgroup, numberofcustomers
+FROM Sales.PivotCustGroups
+UNPIVOT (numberofcustomers FOR custgroup IN (A, B, C)) AS p;
+
+/*
+soal 11 - grouping sets
+Buatlah query SELECT terhadap tabel Sales.Customers yang terdiri dari kolom contry, 
+city, dan kolom kalkulasi yang menghitung banyaknya customer bernama noofcustomers. 
+Dapatkan pengelompokan (grouping set) berdasarkan: 
+ kolom country dan city 
+ kolom country 
+ kolom city 
+ dan sebuah kolom tanpa kelompok
+*/
+
+SELECT
+	country, city, COUNT(*) AS noofcustomers
+FROM Sales.Customers
+GROUP BY GROUPING SETS ((country, city), (country), (city), ());
+
+
+/*
+soal 12 - cube
+Buatlah sebuah query SELECT yang menggunakan sub klause CUBE terhadap view Sales.OrderValues yang berisi kolom: 
+ orderyear: tahun dari kolom orderdate 
+ ordermounth: bulan dari kolom orderdate
+ orderday: hari dari kolom orderdate
+ salesvalue: total jumlah penjualan dari kolom val
+*/
+
+SELECT
+	YEAR(orderdate) AS orderyear,
+	MONTH(orderdate) AS ordermonth,
+	DAY(orderdate) AS orderday,
+	SUM(val) AS salesvalue
+FROM Sales.OrderValues
+GROUP BY CUBE (YEAR(orderdate), MONTH(orderdate), DAY(orderdate));
+
+/*
+soal 13 - rollup
+alinlah query dari Soal no 12 di atas dan ubah sub klausa CUBE menjadi ROLLUP, lalu 
+jalankan query tersebut
+*/
+
+SELECT
+	YEAR(orderdate) AS orderyear,
+	MONTH(orderdate) AS ordermonth,
+	DAY(orderdate) AS orderday,
+	SUM(val) AS salesvalue
+FROM Sales.OrderValues
+GROUP BY ROLLUP (YEAR(orderdate), MONTH(orderdate), DAY(orderdate));
+
+/*
+soal 14
+Apakah perbedaan antara sub klausa ROLLUP dan CUBE? Manakah yang lebih tepat 
+digunakan untuk query pada langkah 1 di atas? 
+*/
+
+/*
+Perbedaan antara sub klausa ROLLUP dan CUBE adalah ROLLUP hanya menghasilkan
+subtotals untuk kolom yang ditentukan, sedangkan CUBE menghasilkan subtotals untuk
+semua kombinasi dari kolom yang ditentukan. Untuk query pada langkah 1 di atas, lebih
+tepat menggunakan ROLLUP.
+*/
+
+/*
+soal 15 - menganalisa total nilai penjualan berdasarkan tahun dan bulan
+Buatlah query SELECT terhadap view Sales.OrderValues dan dapatkan kolom berikut 
+ini: 
+ kolom kalkulasi dengan nama alias groupid (gunakan fungsi GROUPING_ID dengan 
+tahun order dan bulan order sebagai parameter inputnya) 
+ orderyear: tahun dari kolom orderdate 
+ ordermonth: bulan dari kolom orderdate
+ salesvalue: total nilai penjualan dari kolom val
+ oleh karena tahun dan bulan berbentuk hierarki, dapatkan semua pengelompokan/ 
+grouping set berdasarkan kolom orderyear dan ordermonth, lalu urutkan 
+berdasarkan groupid, orderyear, dan ordermonth
+*/
+
+SELECT
+	GROUPING_ID(YEAR(orderdate), MONTH(orderdate)) AS groupid,
+	YEAR(orderdate) AS orderyear,
+	MONTH(orderdate) AS ordermonth,
+	SUM(val) AS salesvalue
+FROM Sales.OrderValues
+GROUP BY GROUPING SETS ((YEAR(orderdate), MONTH(orderdate)), (YEAR(orderdate)), ());
+
