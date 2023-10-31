@@ -1,4 +1,6 @@
 use TSQL;
+
+-- JOBSHEET 6
 --1
 /*Tulislah	 sebuah	 query	 SELECT	 untuk	 menampilkan kolom	 
 productid,	 productname, supplierid,	unitprice dan	kolom	discontinued 
@@ -351,7 +353,7 @@ p.totalsalesamount
 FROM dbo.fnGetTop3ProductsForCustomer(1) AS p;
 
 
--- JOBHSEET 6
+-- JOBHSEET 7
 
 /*
 Skenario :
@@ -487,7 +489,7 @@ WITH OrderRows AS
 	FROM Sales.OrderValues
 )
 SELECT
-	o.orderid, o.orderdate, o.val, o.val - p.val AS diffprev
+	o.orderid, o.orderdate, o.val, p.val AS prevval, o.val - p.val AS diffprev
 FROM OrderRows AS o
 LEFT JOIN OrderRows AS p ON o.rowno = p.rowno + 1;
 
@@ -499,10 +501,14 @@ dengan query pada soal no.2! Query tidak yang dibuat pada soal ini tidak menggun
 */
 
 SELECT
-	orderid, orderdate, val,
-	ROW_NUMBER() OVER (ORDER BY orderdate, orderid) AS rowno,
-	LAG(val) OVER (ORDER BY orderdate, orderid) AS prevval
-FROM Sales.OrderValues;
+	orderid, orderdate, val, prevval, diffprev
+FROM (
+	SELECT
+		orderid, orderdate, val,
+		LAG(val) OVER (ORDER BY orderdate, orderid) AS prevval,
+		val - LAG(val) OVER (ORDER BY orderdate, orderid) AS diffprev
+	FROM Sales.OrderValues
+) AS Subquery;
 
 /*
 soal 10
@@ -531,7 +537,26 @@ dan tambahkan 3 kolom untuk ditampilkan, yaitu :
 2) diffjanuary (perbedaan antara val saat ini dengan val pada bulan januari, gunakan fungsi 
 FIRST_VALUE)
 3) nextval (nilai dari kolom val pada bulan selanjutnya)
+Informasi : Jumlah rata-rata untuk tiga bulan terakhir tidak dihitung dengan benar karena jumlah 
+total 2 bulan pertama dibagi dengan 3.
+* Gunakan fungsi OFFSET
 */
+
+WITH SalesMonth2007 AS
+(
+	SELECT
+		MONTH(orderdate) AS monthno, SUM(val) AS val
+	FROM Sales.OrderValues
+	WHERE YEAR(orderdate) = 2007
+	GROUP BY MONTH(orderdate)
+)
+SELECT
+	monthno, val,
+	AVG(val) OVER (ORDER BY monthno ROWS BETWEEN 3 PRECEDING AND 1 PRECEDING) AS
+	avglast3months,
+	CAST(val - FIRST_VALUE(val) OVER (ORDER BY monthno) AS DECIMAL(10, 2)) AS diffjanuary,
+	LEAD(val) OVER (ORDER BY monthno) AS nextval
+FROM SalesMonth2007;
 
 
 
@@ -543,7 +568,7 @@ SELECT yang berbeda menggunakan fungsi agregasi window
 */
 
 /*
-soal 12
+soal 12 - menuliskan query menggunakan fungsi agregasi window
  Tuliskan pernyataan SELECT untuk mengambil kolom custid, orderid, orderdate, dan 
 val dari view Sales.OrderValues. Tambahkan kolom bernama percoftotalcust yang berisi 
 persentase nilai masing-masing jumlah pesanan penjualan dibandingkan dengan jumlah 
@@ -551,10 +576,17 @@ penjualan untuk pelanggan tersebut. Urutkan val dari yang terbesar
 */
 
 SELECT
-	custid, orderid, orderdate, val,
-	CAST(val * 100. / SUM(val) OVER (PARTITION BY custid) AS DECIMAL(5, 2)) AS percoftotalcust
-FROM Sales.OrderValues
+	custid, orderid, orderdate, val, percoftotalcust
+FROM (
+	SELECT
+		custid, orderid, orderdate, val,
+		CAST(val * 100. / SUM(val) OVER (PARTITION BY custid) AS DECIMAL(5, 2)) AS
+		percoftotalcust
+	FROM Sales.OrderValues
+) AS Subquery
 ORDER BY val DESC;
+
+
 
 /*
 soal 13
