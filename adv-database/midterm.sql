@@ -81,7 +81,7 @@ VALUES
     (5, 4, 3, '2022-12-10 23:26:11.753', '2019-11-17 23:26:11.753'),
     (6, 4, 5, '2023-07-10 23:26:11.753', '2023-03-17 23:26:11.753'),
     (8, 6, 1, '2020-03-10 23:26:11.753', '2023-06-17 23:26:11.753'),
-    (11, 1, 4, '2021-12-10 23:26:11.753', '2020-12-17 23:26:11.753'),
+    (11, 2, 4, '2021-12-10 23:26:11.753', '2020-12-17 23:26:11.753'),
     (12, 2, 5, '2023-10-10 23:26:11.753', '2019-09-17 23:26:11.753'),
     (13, 7, 5, '2022-02-10 23:26:11.753', '2022-08-17 23:26:11.753'),
     (15, 10, 4, '2022-07-10 23:26:11.753', '2020-06-17 23:26:11.753'),
@@ -100,7 +100,7 @@ VALUES
     (43, 8, 3, '2022-08-10 23:26:11.753', '2023-07-17 23:26:11.753'),
     (44, 9, 1, '2021-06-10 23:26:11.753', '2021-03-17 23:26:11.753'),
     (46, 6, 3, '2020-04-10 23:26:11.753', '2023-01-17 23:26:11.753'),
-    (50, 1, 3, '2023-08-10 23:26:11.753', '2023-02-17 23:26:11.753');
+    (50, 2, 3, '2023-08-10 23:26:11.753', '2023-02-17 23:26:11.753');
 
 
 -- 1. Buatlah diagram relasi dari keempat tabel tersebut.
@@ -163,12 +163,20 @@ INNER JOIN Users AS u ON u.UserID = l.UserID
 WHERE b.BookID = 1;
 
 
--- 10. Cari tahu siapa yang meminjam buku tertentu pada tanggal spesifik.
+-- 10. Cari tahu siapa yang meminjam buku tertentu pada tanggal nya saja yang  spesifik.
+UPDATE Loans
+SET LoanDate = CAST(LoanDate AS DATE),
+    ReturnDate = CAST(ReturnDate AS DATE);
+
 SELECT b.Title, u.Username, l.LoanDate, l.ReturnDate
 FROM Books AS b
 INNER JOIN Loans AS l ON l.BookID = b.BookID
 INNER JOIN Users AS u ON u.UserID = l.UserID
-WHERE b.BookID = 1 AND l.LoanDate = '2021-01-01';
+WHERE b.BookID = 1 AND l.LoanDate = '2021-05-10';
+
+
+
+
 
 -- 11. Buatlah query untuk menampilkan buku yang paling lama dipinjam.
 SELECT b.Title, DATEDIFF(DAY, l.LoanDate, l.ReturnDate) AS LamaPeminjaman
