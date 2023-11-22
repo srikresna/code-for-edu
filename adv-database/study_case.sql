@@ -58,6 +58,13 @@ VALUES
   (4, 'Aksesoris B', 30.00, 'Aksesoris', 25),
   (5, 'Sepatu Wanita A', 80.00, 'Sepatu Wanita', 10);
 
+INSERT INTO Produk (ID_Produk, Nama, Harga, Kategori, Stok)
+VALUES (7, 'Pakaian Wanita C', 55.00, 'Pakaian Wanita', 100),
+         (8, 'Pakaian Wanita D', 60.00, 'Pakaian Wanita', 50),
+         (9, 'Aksesoris C', 35.00, 'Aksesoris', 200),
+         (10, 'Aksesoris D', 40.00, 'Aksesoris', 150),
+         (11, 'Sepatu Wanita B', 85.00, 'Sepatu Wanita', 75);
+
 -- Insert data ke tabel Pelanggan
 INSERT INTO Pelanggan (ID_Pelanggan, Nama, Alamat, Email, No_Telepon)
 VALUES 
@@ -84,6 +91,9 @@ VALUES
   (1, 'Supplier A', 'Alamat Supplier A', '111111111'),
   (2, 'Supplier B', 'Alamat Supplier B', '222222222');
 
+INSERT INTO Supplier (ID_Supplier, Nama, Alamat, No_Telepon)
+VALUES 
+  (10, 'Supplier D', 'Alamat Supplier D', '12121111');
 -- Insert data ke tabel Penjualan
 INSERT INTO Penjualan (ID_Penjualan, ID_Produk, ID_Pelanggan, ID_Karyawan, Tanggal, Jumlah, Total_Harga)
 VALUES 
@@ -91,6 +101,9 @@ VALUES
   (2, 3, 2, 2, '2023-01-03', 1, 25.00),
   (3, 2, 3, 3, '2023-01-05', 3, 135.00);
 
+INSERT INTO Penjualan (ID_Penjualan, ID_Produk, ID_Pelanggan, ID_Karyawan, Tanggal, Jumlah, Total_Harga)
+VALUES
+	(4, 1, 2, 3, '2023-06-06', 3, 155.00);
 
 -- Tampilkan semua produk dalam kategori 'Pakaian Wanita'
 SELECT * FROM Produk WHERE Kategori = 'Pakaian Wanita';
@@ -154,16 +167,29 @@ VALUES (6, 'Pakaian Wanita C', 55.00, 'Pakaian Wanita', 10);
 
 
 -- 13. Hapus semua karyawan yang belum melakukan penjualan dalam 6 bulan terakhir.
+ALTER TABLE Karyawan
+ADD Aktif BIT;
 
-
-
-
+UPDATE Karyawan
+SET Aktif = 0
+WHERE ID_Karyawan NOT IN (
+    SELECT DISTINCT P.ID_Karyawan
+    FROM Penjualan P
+    WHERE P.Tanggal >= DATEADD(MONTH, -6, GETDATE())
+);
 
 -- 14. Update alamat pelanggan tertentu di tabel Pelanggan.
 UPDATE Pelanggan SET Alamat = 'Alamat Baru' WHERE ID_Pelanggan = 1;
 
 
 -- 15. Tampilkan total gaji yang dibayarkan per cabang.
+SELECT
+    C.ID_Cabang,
+    C.Nama_Cabang,
+    SUM(K.Gaji) AS Total_Gaji
+FROM Cabang C
+JOIN Karyawan K ON C.ID_Cabang = K.ID_Cabang
+GROUP BY C.ID_Cabang, C.Nama_Cabang;
 
 
 -- 16. Tampilkan supplier yang telah menyediakan lebih dari 50 unit produk.
@@ -174,10 +200,28 @@ SELECT Kategori, AVG(Harga) AS 'Rata-rata Harga' FROM Produk
 GROUP BY Kategori;
 
 -- 18. Tampilkan penjualan tertinggi yang dicapai oleh seorang karyawan.
+WITH RankedSales AS (
+    SELECT
+        ID_Penjualan,
+        ID_Karyawan,
+        Total_Harga,
+        ROW_NUMBER() OVER (PARTITION BY ID_Karyawan ORDER BY Total_Harga DESC) AS Rank
+    FROM Penjualan
+)
+SELECT
+    R.ID_Penjualan,
+    R.ID_Karyawan,
+    K.Nama AS Nama_Karyawan,
+    R.Total_Harga
+FROM RankedSales R
+JOIN Karyawan K ON R.ID_Karyawan = K.ID_Karyawan
+WHERE R.Rank = 1;
 
 
 -- 19. Tampilkan semua penjualan yang dilakukan pada hari Jumat.
-
+SELECT *
+FROM Penjualan
+WHERE DATEPART(WEEKDAY, Tanggal) = 6;
 
 -- 20. Tampilkan daftar produk dengan stok lebih dari rata-rata stok semua produk
 SELECT * FROM Produk WHERE Stok > (SELECT AVG(Stok) FROM Produk);
