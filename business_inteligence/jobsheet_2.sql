@@ -1,4 +1,4 @@
--- USE classicmodels;
+USE classicmodels;
 
 -- -- PRAKTIKUM 1
 SELECT * FROM employees;
@@ -8,7 +8,7 @@ SELECT * FROM employees;
 -- SELECT * FROM orderdetails;
 -- SELECT * FROM payments;
 -- SELECT * FROM productlines;
--- SELECT * FROM offices;
+SELECT * FROM offices;
 
 SELECT *
 FROM employees employe, employees manager, customers cust
@@ -93,3 +93,66 @@ JOIN customers cust ON pay.customerNumber=cust.customerNumber
 JOIN employees employee ON cust.salesRepEmployeeNumber=employee.employeeNumber
 WHERE employee.firstName="Pamela" AND employee.lastName="Castillo"
 GROUP BY tahun;
+
+-- Pak Huhut merupakan pemegang saham LegendVehicle. dia membutuhkan dashboard untuk melihat perkembangan penjualan (omset) disetiap cabang di tiap tahunnya. Dikarenakan perusahaan tersebut belum merekrut Data Engineer maka, penarikan informasi hanya bisa dilakukan melaluai OLTP yang ada.
+-- Buatlah report pertahun untuk KPI "Jumlah omset yang didapat" pada setiap cabang. Serta gambarkan grafiknya (grafik garis).
+
+-- Analisalah terlebih dahulu:
+
+-- Field apa saja yang diperlukan untuk menampilkan penjualan di setiap cabang.
+-- ANSWER : field yang diperlukan adalah paymentDate, amount, city.
+
+-- Bentuk query dengan memperhatikan relasi antar tabel.
+-- ANSWER :
+
+SELECT year(pay.paymentDate) as tahun,
+off.city,
+sum(pay.amount) as total_omset
+FROM payments pay
+JOIN customers cust ON pay.customerNumber=cust.customerNumber
+JOIN employees employee ON cust.salesRepEmployeeNumber=employee.employeeNumber
+JOIN offices off ON employee.officeCode=off.officeCode
+GROUP BY tahun, off.city;
+
+-- SOAL BONUS: buatlah report lain dengan sumber data OLTP yang sama, analisa field yang digunakan, bentuk struktur query dan tuliskan dalam tabel serta grafiknya.
+-- ANSWER :
+
+-- Field apa saja yang diperlukan untuk menampilkan product yang paling banyak terjual.
+-- ANSWER : field yang diperlukan adalah productName, quantityOrdered.
+
+-- Bentuk query dengan memperhatikan relasi antar tabel.
+-- ANSWER :
+
+SELECT prod.productName,
+sum(ord.quantityOrdered) as total_terjual
+FROM orderdetails ord
+JOIN products prod ON ord.productCode=prod.productCode
+GROUP BY prod.productName
+ORDER BY total_terjual DESC
+LIMIT 5;
+
+-- Field apa saja yang diperlukan untuk menampilkan order yang paling banyak terjadi.
+-- ANSWER : field yang diperlukan adalah orderNumber, orderDate.
+
+-- Bentuk query dengan memperhatikan relasi antar tabel.
+-- ANSWER :
+
+SELECT year(ord.orderDate) as tahun,
+count(ord.orderNumber) as total_order
+FROM orders ord
+GROUP BY tahun;
+
+-- Field apa saja yang diperlukan untuk menampilkan customer yang paling banyak bertransaksi.
+-- ANSWER : field yang diperlukan adalah customerName, orderNumber.
+
+-- Bentuk query dengan memperhatikan relasi antar tabel.
+-- ANSWER :
+
+SELECT cust.customerName,
+count(ord.orderNumber) as total_order
+FROM customers cust
+JOIN orders ord ON cust.customerNumber=ord.customerNumber
+GROUP BY cust.customerName
+ORDER BY total_order DESC
+LIMIT 5;
+
