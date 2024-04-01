@@ -156,3 +156,7 @@ GROUP BY cust.customerName
 ORDER BY total_order DESC
 LIMIT 5;
 
+
+
+-- insert data ke employee
+INSERT INTO employees (employeeNumber, lastName, firstName, extension, email, officeCode, reportsTo, jobTitle) VALUES (2241720244, 'Kresna', 'Sri', 'x2241', 'srikresna@gmail.com', 1, '1002', 'CEO');
