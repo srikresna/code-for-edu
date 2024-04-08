@@ -1,7 +1,4 @@
 CREATE DATABASE dw_LegendVehicle;
-CREATE DATABASE test;
-use test
-
 use dw_LegendVehicle;
 
 CREATE TABLE dimDate(
@@ -14,6 +11,8 @@ CREATE TABLE dimDate(
 
 SELECT * FROM dimDate;
 
+DROP TABLE dimDate;
+
 CREATE TABLE dimEmployees(
     id_dimEmployees int not null AUTO_INCREMENT PRIMARY KEY,
     employeeNumber int,
@@ -25,16 +24,20 @@ CREATE TABLE dimEmployees(
     updated date DEFAULT CURRENT_DATE
 );
 
-DROP TABLE dimEmployees;
 
 SELECT * FROM dimEmployees;
 
 DROP TABLE dimEmployees;
 
+
 CREATE TABLE FactOmset(
-    id_dimEmployees INT NOT NULL,
-    id_dimDate INT NOT NULL,
-    amount DECIMAL(10,2) NOT NULL
+    id_dimEmployees INT,
+    id_dimDate INT,
+    amount DECIMAL(10,2)
 );
 
 SELECT * FROM FactOmset;
+
+DROP TABLE FactOmset;
+
+

@@ -68,12 +68,13 @@ JOIN employees manager ON employee.reportsTo = manager.employeeNumber
 left join customers cust on employee.employeeNumber=cust.salesRepEmployeeNumber
 left join payments pay on cust.customerNumber=pay.customerNumber
 GROUP BY employee.employeeNumber
-ORDER BY total_omset DESC;
+ORDER BY total_omset DESC
+LIMIT 5;
 -- ANSWER : TOP 5 -> Gerard Hernandez - Leslie Jennings - Pamela Castillo - Larry Bott - Barry Jones
 
 -- Jika KPI yang pertama merupakan "Jumlah customer yang bertransaksi" sedangkan KPI yang kedua "Jumlah omset yang didapat". Maka, berapakah jumlah field yang dibutuhkan untuk mendapatkan informasi tersebut?
 -- ANSWER : jumlah customer yang bertransaksi membutuhkan 2 field, yaitu employeeNumber dan customerNumber. Karena 
---           employeeNumber merupakan foreign key dari tabel employees, dan customerNumber merupakan foreign key dari tabel customers.
+--          employeeNumber merupakan foreign key dari tabel employees, dan customerNumber merupakan foreign key dari tabel customers.
 --           Jumlah omset yang didapat membutuhkan 3 field, yaitu employeeNumber, customerNumber, dan amount. Karena
 --           employeeNumber merupakan foreign key dari tabel employees, customerNumber merupakan foreign key dari tabel customers, dan amount merupakan field dari tabel payments.
 
@@ -93,6 +94,16 @@ JOIN customers cust ON pay.customerNumber=cust.customerNumber
 JOIN employees employee ON cust.salesRepEmployeeNumber=employee.employeeNumber
 WHERE employee.firstName="Pamela" AND employee.lastName="Castillo"
 GROUP BY tahun;
+
+SELECT year(pay.paymentDate) as tahun,
+employee.firstName,
+employee.lastName,
+sum(pay.amount) as total_omset
+FROM payments pay
+JOIN customers cust ON pay.customerNumber=cust.customerNumber
+JOIN employees employee ON cust.salesRepEmployeeNumber=employee.employeeNumber
+WHERE employee.firstName IN ("Foon Yue", "Pamela") AND employee.lastName IN ("Tseng", "Castillo")
+GROUP BY tahun, employee.firstName, employee.lastName;
 
 -- Pak Huhut merupakan pemegang saham LegendVehicle. dia membutuhkan dashboard untuk melihat perkembangan penjualan (omset) disetiap cabang di tiap tahunnya. Dikarenakan perusahaan tersebut belum merekrut Data Engineer maka, penarikan informasi hanya bisa dilakukan melaluai OLTP yang ada.
 -- Buatlah report pertahun untuk KPI "Jumlah omset yang didapat" pada setiap cabang. Serta gambarkan grafiknya (grafik garis).
