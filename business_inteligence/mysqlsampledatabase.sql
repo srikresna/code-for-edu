@@ -120,6 +120,25 @@ CREATE TABLE orderdetails (
   FOREIGN KEY (productCode) REFERENCES products (productCode)
 );
 
+select * from employees;
+select * from employees e 
+left join employees r 
+on e.reportsTo=r.employeeNumber;
+
+-- employees table
+select * 
+from employees e 
+left join employees r on e.reportsTo=r.employeeNumber
+inner join customers c on e.employeeNumber=c.salesRepEmployeeNumber
+inner join payments p on c.customerNumber=p.customerNumber;
+
+-- product table
+select * 
+from products p
+inner join orderdetails od on p.productCode=od.productCode
+inner join orders o on od.orderNumber=o.orderNumber
+inner join customers c on o.customerNumber=c.customerNumber;
+
 
 /* Inserting data  */
 insert  into productlines(productLine,textDescription,htmlDescription,image) values 
