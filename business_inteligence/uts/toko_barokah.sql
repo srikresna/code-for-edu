@@ -29,6 +29,13 @@ SELECT * FROM transaksi;
 --
 -- Table structure for table `detail_transaksi`
 --
+SELECT 
+FROM Pembeli as b, Penjual as j, Produk as p, Detail_transaksi as d, transaksi as t
+WHERE t.fk_id_pembeli = b.id_member
+AND t.fk_id_penjual = j.id_penjual
+AND t.nomor_transaksi = d.fk_nomor_transaksi
+AND d.fk_id_produk = p.id_produk;
+
 
 SELECT * FROM detail_transaksi dp
 join produk p on p.id_produk=dp.fk_id_produk

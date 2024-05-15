@@ -29,20 +29,34 @@ CREATE TABLE dimDateVal (
     Day INT
 );
 
-DROP TABLE dimDateVal;
-SELECT * FROM dimDateval;
 
-CREATE TABLE factTransaction (
+
+CREATE TABLE fakta(
     id_dimPembeli INT,
     id_dimPenjual INT,
     id_dimProduk INT,
     id_dimDate INT,
     harga DOUBLE,
     qty INT,
+    total DOUBLE,
     FOREIGN KEY (id_dimPembeli) REFERENCES dimPembeli(id_dimPembeli),
     FOREIGN KEY (id_dimPenjual) REFERENCES dimPenjual(id_dimPenjual),
     FOREIGN KEY (id_dimProduk) REFERENCES dimProduk(id_dimProduk),
     FOREIGN KEY (id_dimDate) REFERENCES dimDateVal(id_dimDate)
 );
 
-DROP TABLE factTransaction;
+-- truncate table dimPembeli;
+TRUNCATE TABLE dimPembeli;
+TRUNCATE TABLE dimPenjual;
+TRUNCATE TABLE dimProduk;
+TRUNCATE TABLE dimDateVal;
+TRUNCATE TABLE fakta;
+
+
+
+SELECT * FROM dimDateval;
+SELECT * FROM dimPembeli;
+SELECT * FROM dimPenjual;
+SELECT * FROM dimProduk;
+SELECT * FROM fakta;
+
