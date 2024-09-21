@@ -12,12 +12,12 @@ void main() {
 
   print('-----------------');
 
-  (String, int) mahasiswa = ('Davis Maulana Hermanto', 2241720255);
+  (String, int) mahasiswa = ('Sri Kresna Maha Dewa', 2241720244);
   print(mahasiswa);
 
   print('-----------------');
 
-  var mahasiswa2 = ('Davis Maulana Hermanto', a: 2241720255, b: true, '');
+  var mahasiswa2 = ('Sri Kresna Maha Dewa', a: 2241720244, b: true, '');
 
   print(mahasiswa2.$1); // Prints 'first'
   print(mahasiswa2.a); // Prints 2

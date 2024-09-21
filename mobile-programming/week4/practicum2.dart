@@ -19,18 +19,18 @@ void main() {
   var names3 = {}; 
 
   // Adding element by using .add()
-  names1.add("Davis Maulana Hermanto"); 
-  names1.add("2241720255");  
+  names1.add("Sri Kresna Maha Dewa"); 
+  names1.add("2241720244");  
 
   // Adding element by using .addAll()
-  names2.addAll(["Davis Maulana Hermanto", "2241720255"]); 
+  names2.addAll(["Sri Kresna Maha Dewa", "2241720244"]); 
 
   print("names1 (Set): $names1");
   print("names2 (Set): $names2");
 
   // Map names3
-  names3["Name"] = "Davis Maulana Hermanto"; 
-  names3["NIM"] = "2241720255";   
+  names3["Name"] = "Sri Kresna Maha Dewa"; 
+  names3["NIM"] = "2241720244";   
   
 
   print("names3 (Map): $names3");
